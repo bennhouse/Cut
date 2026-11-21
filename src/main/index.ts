@@ -11,7 +11,7 @@ import debounce from 'lodash/debounce.js';
 import yargsParser from 'yargs-parser';
 import JSON5 from 'json5';
 import remote from '@electron/remote/main/index.js';
-import { readFile, stat } from 'node:fs/promises';
+import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import assert from 'node:assert';
 import timers from 'node:timers/promises';
@@ -160,7 +160,7 @@ function getSavedBounds() {
   };
 }
 
-const getBackgroundColor = () => (nativeTheme.shouldUseDarkColors ? '#333' : '#fff');
+const getBackgroundColor = () => (nativeTheme.shouldUseDarkColors ? '#1e1e1e' : '#ececec');
 
 function createWindow() {
   const savedBounds = getSavedBounds();
@@ -176,11 +176,26 @@ function createWindow() {
       preload: fileURLToPath(new URL('../preload/index.cjs', import.meta.url)),
     },
     backgroundColor: getBackgroundColor(),
+    // Cut: macOS window, the top bar sits in the title bar beside the traffic lights.
+    ...(isMac ? { titleBarStyle: 'hiddenInset' as const, trafficLightPosition: { x: 14, y: 13 } } : {}),
     minWidth: 300,
     minHeight: 300,
   });
 
   if (savedBounds.isMaximized) mainWindow.maximize();
+
+  // Development aid (Cut): with --cut-snapshot <folder> (or CUT_SNAPSHOT=<folder>), a PNG of the
+  // window's content is written every second, so the layout can be checked without screen recording.
+  const snapshotDir = (argv['cutSnapshot'] as string | undefined) ?? process.env['CUT_SNAPSHOT'];
+  if (snapshotDir) {
+    void mkdir(snapshotDir, { recursive: true });
+    setInterval(() => {
+      if (mainWindow == null || mainWindow.isDestroyed()) return;
+      mainWindow.webContents.capturePage()
+        .then((image) => writeFile(join(snapshotDir, 'window.png'), image.toPNG()))
+        .catch((err: unknown) => logger.warn('snapshot failed', err));
+    }, 1000);
+  }
 
   remote.enable(mainWindow.webContents);
 
@@ -436,7 +451,8 @@ async function init() {
 
     const enableUpdateCheck = configStore.get('enableUpdateCheck');
 
-    if (!hasDisabledNetworking() && enableUpdateCheck && !isStoreBuild) {
+    // Cut: no update check (it would offer LosslessCut releases).
+    if (false as boolean && !hasDisabledNetworking() && enableUpdateCheck && !isStoreBuild) {
       newVersion = await checkNewVersion();
       // newVersion = '1.2.3';
       if (newVersion) updateMenu();

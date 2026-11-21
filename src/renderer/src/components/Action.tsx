@@ -1,4 +1,4 @@
-import { FaBolt } from 'react-icons/fa';
+import { FaBolt } from '../icons';
 import type { KeyboardAction } from '../../../common/types';
 
 

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { FaExclamationTriangle } from 'react-icons/fa';
+import { FaExclamationTriangle } from '../icons';
 
 import * as Dialog from './Dialog';
 import { DialogButton } from './Button';

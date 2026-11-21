@@ -1,4 +1,4 @@
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes } from '../icons';
 import type { DetailedHTMLProps, ButtonHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 

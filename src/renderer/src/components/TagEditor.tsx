@@ -3,7 +3,7 @@ import { memo, useRef, useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { motion } from 'motion/react';
-import { FaCheck, FaChevronDown, FaClipboard, FaClipboardList, FaClone, FaCopy, FaEdit, FaInfo, FaPlus, FaTrash, FaUndo } from 'react-icons/fa';
+import { FaCheck, FaChevronDown, FaClipboard, FaClipboardList, FaClone, FaCopy, FaEdit, FaInfo, FaPlus, FaTrash, FaUndo } from '../icons';
 import { IconButton, Tooltip, Button, TextArea, DropdownMenu } from '@radix-ui/themes';
 
 import type { SegmentTags } from '../types';
@@ -226,7 +226,7 @@ function TagEditor({ existingTags = emptyObject, customTags = emptyObject, editi
                     </Tooltip>
                   )}
 
-                  <IconButton disabled={editingOther} size="1" variant="ghost" color={editingThis ? 'cyan' : 'gray'} title={t('Edit')} onClick={() => onEditClick(tag)}>{editingThis ? <FaCheck /> : <FaEdit />}</IconButton>
+                  <IconButton disabled={editingOther} size="1" variant="ghost" color={editingThis ? 'blue' : 'gray'} title={t('Edit')} onClick={() => onEditClick(tag)}>{editingThis ? <FaCheck /> : <FaEdit />}</IconButton>
 
                   {editingThis && thisTagNew && (
                     <IconButton size="1" color="red" variant="ghost" title={t('Delete')} onClick={onResetClick}><FaTrash /></IconButton>

@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaImage } from 'react-icons/fa';
+import { FaImage } from '../icons';
 
 import useUserSettings from '../hooks/useUserSettings';
 import useActionTitle from '../hooks/useActionTitle';

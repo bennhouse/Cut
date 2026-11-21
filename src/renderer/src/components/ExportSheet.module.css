@@ -4,9 +4,9 @@
   right: 0;
   top: 0;
   bottom: 0;
-  background: var(--white-a9);
+  /* Cut: dims the window behind a solid panel, as a macOS sheet */
+  background: var(--black-a6);
   color: var(--gray-12);
-  backdrop-filter: blur(30px);
   overflow-y: scroll;
   display: flex;
   justify-content: center;
@@ -14,19 +14,17 @@
 }
 
 :global(.dark-theme) .sheet {
-  background: var(--black-a9);
+  background: var(--black-a8);
 }
 
 .box {
   margin: 15px 15px 50px 15px;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 10px 20px;
   min-height: 500px;
   position: relative;
   max-width: 100%;
-  background: var(--white-a11);
-}
-
-:global(.dark-theme) .box {
-  background: var(--black-a11);
+  background: var(--cut-panel);
+  border: .5px solid var(--cut-hairline);
+  box-shadow: 0 1.2em 3.5em rgba(0, 0, 0, .3);
 }

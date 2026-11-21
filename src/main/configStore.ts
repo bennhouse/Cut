@@ -161,7 +161,7 @@ const defaults: Config = {
     trashTmpFiles: true, askForCleanup: true, closeFile: true, cleanupAfterExport: false,
   },
   allowMultipleInstances: false,
-  theme: 'dark',
+  theme: 'system',
   videoFit: 'contain',
   preferStrongColors: false,
   outputFileNameMinZeroPadding: 1,

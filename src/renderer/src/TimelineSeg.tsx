@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo } from 'react';
 import type { MotionStyle } from 'motion/react';
 import { motion, AnimatePresence } from 'motion/react';
-import { FaSave, FaTrashAlt } from 'react-icons/fa';
+import { FaSave, FaTrashAlt } from './icons';
 import type { ColorInstance } from 'color';
 
 import useUserSettings from './hooks/useUserSettings';

@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import i18n from 'i18next';
 import { Trans } from 'react-i18next';
 import invariant from 'tiny-invariant';
-import { FaArrowRight, FaExclamationTriangle, FaInfoCircle, FaQuestionCircle } from 'react-icons/fa';
+import { FaArrowRight, FaExclamationTriangle, FaInfoCircle, FaQuestionCircle } from '../icons';
 import ky from 'ky';
 import pMap from 'p-map';
 

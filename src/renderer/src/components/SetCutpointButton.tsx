@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { FaHandPointUp } from 'react-icons/fa';
+import { FaHandPointUp } from '../icons';
 
 import SegmentCutpointButton from './SegmentCutpointButton';
 import { mirrorTransform } from '../util';

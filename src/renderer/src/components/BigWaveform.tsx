@@ -1,6 +1,6 @@
 import type { CSSProperties, MouseEventHandler, WheelEventHandler } from 'react';
 import { memo, useEffect, useState, useCallback, useRef, useMemo } from 'react';
-import { FaExclamationCircle } from 'react-icons/fa';
+import { FaExclamationCircle } from '../icons';
 
 import { ffmpegExtractWindow } from '../util/constants';
 import type { WaveformSlice } from '../types';

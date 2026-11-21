@@ -3,14 +3,16 @@
   font: inherit;
   line-height: 1.2;
   font-size: .8em;
-  background-color: var(--gray-3);
+  /* Cut: macOS push button: light fill, hairline border, soft shadow */
+  background-color: var(--gray-a3);
   color: var(--gray-12);
-  border-radius: .3em;
-  padding: 0 .5em;
-  outline: .05em solid var(--gray-8);
-  border: .05em solid var(--gray-7);
+  border-radius: var(--cut-radius);
+  padding: .1em .6em;
+  outline: none;
+  border: .5px solid var(--gray-a6);
+  box-shadow: 0 .5px 1px rgba(0, 0, 0, .12);
   cursor: pointer;
-  outline-offset: 0;
+  outline-offset: 1px;
 }
 
 .button:disabled {
@@ -18,10 +20,15 @@
   cursor: not-allowed;
 }
 
-.button:focus {
-  outline: .1em solid var(--gray-12);
+
+.button:focus-visible {
+  outline: 3px solid var(--blue-a8);
 }
 
 .button:hover {
-  filter: brightness(1.2);
+  background-color: var(--gray-a4);
+}
+
+.button:active {
+  background-color: var(--gray-a5);
 }

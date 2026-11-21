@@ -5,7 +5,8 @@ import type { SegmentColorIndex } from '../types';
 
 // eslint-disable-next-line unicorn-js/prefer-https -- TODO fix (new rule in @mifi/lint-config)
 // http://phrogz.net/css/distinct-colors.html
-const colorStrings = '#ff5100, #ffc569, #ddffd1, #00ccff, #e9d1ff, #ff0084, #ff6975, #ffe6d1, #ffff69, #69ff96, #008cff, #ae00ff, #ff002b, #ff8c00, #8cff00, #69ffff, #0044ff, #ff00d4, #ffd1d9'.split(',').map((str) => str.trim());
+// Cut: the macOS system colours, in an order that keeps neighbours apart.
+const colorStrings = '#0a84ff, #ff9f0a, #bf5af2, #30d158, #ff375f, #64d2ff, #ffd60a, #5e5ce6, #ff453a, #66d4cf, #ac8e68, #da8fff'.split(',').map((str) => str.trim());
 const colors = colorStrings.map((str) => color(str));
 
 function getColor(n: number) {

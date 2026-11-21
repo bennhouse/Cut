@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { MdEventNote } from 'react-icons/md';
+import { MdEventNote } from '../icons';
 
 import { primaryTextColor } from '../colors';
 import useUserSettings from '../hooks/useUserSettings';

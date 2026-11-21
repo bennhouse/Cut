@@ -1,14 +1,14 @@
 import type { CSSProperties, ReactEventHandler, FocusEventHandler, DragEventHandler } from 'react';
 import { memo, useEffect, useState, useCallback, useRef, useMemo } from 'react';
-import { FaRegTimesCircle } from 'react-icons/fa';
-import { MdRotate90DegreesCcw } from 'react-icons/md';
+import { FaRegTimesCircle } from './icons';
+import { MdRotate90DegreesCcw } from './icons';
 import { AnimatePresence, MotionConfig } from 'motion/react';
 import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { produce } from 'immer';
 import screenfull from 'screenfull';
 import type { IpcRendererEvent } from 'electron';
-import { IoMdMenu } from 'react-icons/io';
+import { IoMdMenu } from './icons';
 import fromPairs from 'lodash/fromPairs';
 import sum from 'lodash/sum';
 import invariant from 'tiny-invariant';
@@ -2486,7 +2486,8 @@ function App() {
   }, [setWaveformMode]);
 
   useEffect(() => {
-    if (!isStoreBuild && !hasDisabledNetworking()) loadMifiLink().then(setMifiLink);
+    // Cut: LosslessCut's news/donation link isn't loaded.
+    if (false as boolean && !isStoreBuild && !hasDisabledNetworking()) loadMifiLink().then(setMifiLink);
   }, []);
 
   useEffect(() => {
@@ -2525,7 +2526,7 @@ function App() {
   const rootStyle = useMemo<CSSProperties>(() => ({ ...baseColorStyle, display: 'flex', flexDirection: 'column', height: '100vh', transition: darkModeTransition }), [baseColorStyle]);
 
   return (
-    <Theme appearance={darkMode ? 'dark' : 'light'} accentColor="cyan">
+    <Theme appearance={darkMode ? 'dark' : 'light'} accentColor="blue">
       <MotionConfig reducedMotion={reducedMotion}>
         <AppContext value={appContext}>
           <SegColorsContext value={segColorsContext}>

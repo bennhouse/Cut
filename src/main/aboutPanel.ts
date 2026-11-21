@@ -12,10 +12,13 @@ import { githubUrl, homepageUrl } from '../common/constants.js';
 export function getAboutPanelOptions() {
   const appVersion = app.getVersion();
 
+  // Cut: credits LosslessCut, which it is built from.
   const aboutPanelLines = [
-    isStoreBuild ? homepageUrl : githubUrl,
+    'https://github.com/bennhouse/Cut',
     '',
-    `${t('Copyright')} © 2016-${copyrightYear} Mikael Finstad ❤️ 🇳🇴`,
+    `Based on LosslessCut (${isStoreBuild ? homepageUrl : githubUrl})`,
+    `${t('Copyright')} © 2016-${copyrightYear} Mikael Finstad`,
+    'GPL v2',
   ];
 
   const aboutPanelOptions: AboutPanelOptionsOptions = {

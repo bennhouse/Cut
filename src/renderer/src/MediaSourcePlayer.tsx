@@ -2,7 +2,7 @@ import type { CSSProperties, RefObject, ReactEventHandler, FocusEventHandler } f
 import { useEffect, useRef, useState, useCallback, useMemo, memo } from 'react';
 import invariant from 'tiny-invariant';
 import debounce from 'lodash/debounce.js';
-import { FaVideo } from 'react-icons/fa';
+import { FaVideo } from './icons';
 
 import isDev from './isDev';
 import type { ChromiumHTMLVideoElement } from './types';

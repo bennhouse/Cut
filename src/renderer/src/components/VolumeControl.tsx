@@ -1,6 +1,6 @@
 import type { ChangeEventHandler } from 'react';
 import { memo, useState, useCallback, useRef, useEffect } from 'react';
-import { FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
+import { FaVolumeMute, FaVolumeUp } from '../icons';
 import { useTranslation } from 'react-i18next';
 
 import useActionTitle from '../hooks/useActionTitle';

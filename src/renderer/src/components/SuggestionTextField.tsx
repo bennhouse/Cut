@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
 import { useImperativeHandle, useRef } from 'react';
 import { DropdownMenu, IconButton, TextField } from '@radix-ui/themes';
-import { FaChevronDown } from 'react-icons/fa';
+import { FaChevronDown } from '../icons';
 import { useTranslation } from 'react-i18next';
 
 

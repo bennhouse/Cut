@@ -20,16 +20,33 @@ https://www.radix-ui.com/docs/colors/palette-composition/understanding-the-scale
 
 
 html {
-  font-family: 'Open Sans', 'Noto Sans SemiCondensed', 'Noto Sans', sans-serif;
-  font-size: 16px;
+  /* Cut: the system font (SF Pro on macOS), a little smaller, like native apps */
+  font-family: system-ui, -apple-system, 'Noto Sans', sans-serif;
+  font-size: 15px;
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Cut: bar colours of a macOS window (toolbar, timeline well), light and dark */
+:root {
+  --cut-bar: #f2f2f2;
+  --cut-timeline: #e6e6e6;
+  --cut-hairline: rgba(0, 0, 0, .12);
+  --cut-radius: 6px;
+  --cut-panel: #f6f6f6;
+}
+.dark-theme {
+  --cut-bar: #2b2b2b;
+  --cut-timeline: #1f1f1f;
+  --cut-hairline: rgba(255, 255, 255, .1);
+  --cut-panel: #2a2a2a;
 }
 
 body {
   margin: 0;
   overflow: hidden;
   color: white;
-  background: black;
+  background: #1e1e1e;
 }
 
 /* https://github.com/electron/electron/issues/2538 */

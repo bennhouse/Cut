@@ -1,8 +1,8 @@
 import type { CSSProperties, Dispatch, SetStateAction } from 'react';
 import { memo, useState, useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AiOutlineMergeCells } from 'react-icons/ai';
-import { FaQuestionCircle, FaExclamationTriangle, FaCog, FaCheck, FaInfoCircle } from 'react-icons/fa';
+import { AiOutlineMergeCells } from '../icons';
+import { FaQuestionCircle, FaExclamationTriangle, FaCog, FaCheck, FaInfoCircle } from '../icons';
 import invariant from 'tiny-invariant';
 import pMap from 'p-map';
 import { Table } from '@radix-ui/themes';

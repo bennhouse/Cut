@@ -1,7 +1,7 @@
 import type { ReactNode, SetStateAction, Dispatch } from 'react';
 import { memo, Fragment, useEffect, useMemo, useCallback, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaMouse, FaPlus, FaStepForward, FaStepBackward, FaUndo, FaTrash, FaSave, FaHammer } from 'react-icons/fa';
+import { FaMouse, FaPlus, FaStepForward, FaStepBackward, FaUndo, FaTrash, FaSave, FaHammer } from '../icons';
 import groupBy from 'lodash/groupBy';
 import orderBy from 'lodash/orderBy';
 import uniq from 'lodash/uniq';

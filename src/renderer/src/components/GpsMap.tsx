@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { MapContainer, Popup, TileLayer } from 'react-leaflet';
 import { Marker } from '@adamscybot/react-leaflet-component-marker';
 import 'leaflet/dist/leaflet.css';
-import { FaMapMarkerAlt } from 'react-icons/fa';
+import { FaMapMarkerAlt } from '../icons';
 import i18n from 'i18next';
 
 import { extractSrtGpsTrack } from '../ffmpeg';

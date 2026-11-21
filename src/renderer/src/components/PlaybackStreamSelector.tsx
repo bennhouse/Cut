@@ -1,6 +1,6 @@
 import type { ChangeEventHandler, ChangeEvent } from 'react';
 import { memo, useState, useCallback, useRef, useEffect } from 'react';
-import { MdSubtitles } from 'react-icons/md';
+import { MdSubtitles } from '../icons';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
 

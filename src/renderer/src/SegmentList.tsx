@@ -1,7 +1,7 @@
 import type { SetStateAction, Dispatch, MouseEventHandler, CSSProperties } from 'react';
 import { memo, useMemo, useRef, useCallback, useState, useEffect } from 'react';
-import { FaYinYang, FaSave, FaPlus, FaMinus, FaTag, FaSortNumericDown, FaRegCheckCircle, FaRegCircle, FaTimes } from 'react-icons/fa';
-import { AiOutlineSplitCells } from 'react-icons/ai';
+import { FaYinYang, FaSave, FaPlus, FaMinus, FaTag, FaSortNumericDown, FaRegCheckCircle, FaRegCircle, FaTimes } from './icons';
+import { AiOutlineSplitCells } from './icons';
 import { motion } from 'motion/react';
 import { useTranslation, Trans } from 'react-i18next';
 import type { DragEndEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
@@ -28,7 +28,7 @@ import getSwal from './swal';
 
 
 const buttonBaseStyle: CSSProperties = {
-  margin: '0 3px', borderRadius: 3, color: 'white', cursor: 'pointer', userSelect: 'none',
+  margin: '0 3px', borderRadius: 7, color: 'white', cursor: 'pointer', userSelect: 'none',
 };
 
 const disabledButtonStyle = { color: 'var(--gray-10)', backgroundColor: 'var(--gray-6)' };

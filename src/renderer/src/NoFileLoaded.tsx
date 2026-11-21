@@ -1,7 +1,7 @@
 import { Fragment, memo, useMemo, useState } from 'react';
 import type { MotionStyle } from 'motion/react';
 import { motion } from 'motion/react';
-import { FaMouse } from 'react-icons/fa';
+import { FaMouse } from './icons';
 import { useTranslation, Trans } from 'react-i18next';
 
 import SetCutpointButton from './components/SetCutpointButton';
@@ -32,15 +32,19 @@ const dropzoneStyle: MotionStyle = {
   top: 0,
   bottom: 0,
   color: 'var(--gray-12)',
-  margin: '2em',
+  margin: '1.4em',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
+  gap: '.35em',
   whiteSpace: 'nowrap',
-  borderWidth: '.7em',
+  // Cut: a thin rounded dashed outline, as a macOS drop area
+  borderWidth: 2,
   borderStyle: 'dashed',
-  borderColor: 'var(--gray-3)',
+  borderRadius: 14,
+  borderColor: 'var(--gray-6)',
+  background: 'var(--gray-a2)',
 };
 
 function NoFileLoaded({ mifiLink, currentCutSeg, onClick, darkMode, keyBindingByAction }: {
@@ -60,23 +64,23 @@ function NoFileLoaded({ mifiLink, currentCutSeg, onClick, darkMode, keyBindingBy
     <motion.div
       className="no-user-select"
       style={dropzoneStyle}
-      animate={{ borderColor: dragging ? 'var(--gray-9)' : 'var(--gray-3)' }}
+      animate={{ borderColor: dragging ? 'var(--blue-9)' : 'var(--gray-6)' }}
       onDragOver={() => setDragging(true)}
       onDragLeave={() => setDragging(false)}
       role="button"
       onClick={onClick}
     >
-      <div style={{ fontSize: '1.7em', textTransform: 'uppercase', color: 'var(--gray-11)', marginBottom: '.1em' }}>{t('DROP FILE(S)')}</div>
+      <div style={{ fontSize: '1.6em', fontWeight: 600, letterSpacing: '.02em', textTransform: 'uppercase', color: 'var(--gray-12)', marginBottom: '.2em' }}>{t('DROP FILE(S)')}</div>
 
-      <div style={{ fontSize: '1.3em', color: 'var(--gray-11)', marginBottom: '.1em' }}>
+      <div style={{ fontSize: '1.1em', color: 'var(--gray-11)', marginBottom: '.1em' }}>
         <Trans>See <b>Help</b> menu for help</Trans>
       </div>
 
-      <div style={{ fontSize: '1.3em', color: 'var(--gray-11)' }}>
+      <div style={{ fontSize: '1.1em', color: 'var(--gray-11)' }}>
         <Trans><SetCutpointButton currentCutSeg={currentCutSegOrDefault} side="start" style={{ verticalAlign: 'middle' }} /> <SetCutpointButton currentCutSeg={currentCutSegOrDefault} side="end" style={{ verticalAlign: 'middle' }} />, <Keys keys={keyBindingByAction['setCutStart']?.keys} /> <Keys keys={keyBindingByAction['setCutEnd']?.keys} /> or <span><kbd style={{ marginRight: '.1em' }}>{getModifier(segmentMouseModifierKey)}</kbd></span>+<FaMouse style={{ marginRight: '.1em', verticalAlign: 'middle' }} /> to set cutpoints</Trans>
       </div>
 
-      <div style={{ fontSize: '1.3em', color: 'var(--gray-11)' }} role="button" onClick={(e) => e.stopPropagation()}>
+      <div style={{ fontSize: '1.1em', color: 'var(--gray-11)' }} role="button" onClick={(e) => e.stopPropagation()}>
         {simpleMode ? (
           <Trans><SimpleModeButton style={{ verticalAlign: 'middle' }} /> to show advanced view</Trans>
         ) : (

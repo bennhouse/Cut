@@ -1,9 +1,9 @@
 import type { CSSProperties, Dispatch, ReactNode, SetStateAction } from 'react';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { FaExclamationTriangle, FaInfoCircle, FaRegCheckCircle } from 'react-icons/fa';
+import { FaExclamationTriangle, FaInfoCircle, FaRegCheckCircle } from '../icons';
 import i18n from 'i18next';
 import { useTranslation, Trans } from 'react-i18next';
-import { IoIosHelpCircle, IoIosSettings } from 'react-icons/io';
+import { IoIosHelpCircle, IoIosSettings } from '../icons';
 import type { SweetAlertIcon } from 'sweetalert2';
 
 import ExportButton from './ExportButton';
@@ -58,7 +58,7 @@ function renderNoticeIcon(notice: { warning?: boolean | undefined } | undefined,
   return notice.warning ? (
     <FaExclamationTriangle style={{ flexShrink: '0', fontSize: '.8em', verticalAlign: 'baseline', color: warningColor, ...style }} />
   ) : (
-    <FaInfoCircle style={{ flexShrink: '0', fontSize: '.8em', verticalAlign: 'baseline', color: 'var(--cyan-10)', ...style }} />
+    <FaInfoCircle style={{ flexShrink: '0', fontSize: '.8em', verticalAlign: 'baseline', color: 'var(--blue-10)', ...style }} />
   );
 }
 

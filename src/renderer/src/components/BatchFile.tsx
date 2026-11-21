@@ -1,7 +1,7 @@
 import type { CSSProperties, MouseEventHandler } from 'react';
 import { memo, useRef, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaFile, FaTimes } from 'react-icons/fa';
+import { FaFile, FaTimes } from '../icons';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 

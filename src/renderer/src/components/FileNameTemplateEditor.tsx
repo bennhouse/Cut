@@ -2,9 +2,9 @@ import type { ChangeEventHandler } from 'react';
 import { memo, useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useDebounce, useDebouncedCallback } from 'use-debounce';
 import { useTranslation } from 'react-i18next';
-import { IoIosHelpCircle } from 'react-icons/io';
+import { IoIosHelpCircle } from '../icons';
 import { motion, AnimatePresence } from 'motion/react';
-import { FaCaretUp, FaEdit, FaExclamationTriangle, FaEye, FaFile, FaUndo } from 'react-icons/fa';
+import { FaCaretUp, FaEdit, FaExclamationTriangle, FaEye, FaFile, FaUndo } from '../icons';
 
 import HighlightedText from './HighlightedText';
 import type { GenerateOutFileNames, GeneratedOutFileNames } from '../util/outputNameTemplate';

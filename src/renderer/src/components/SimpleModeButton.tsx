@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaBaby } from 'react-icons/fa';
+import { FaBaby } from '../icons';
 
 import { primaryTextColor } from '../colors';
 import useUserSettings from '../hooks/useUserSettings';

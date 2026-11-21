@@ -1,13 +1,13 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { memo, useCallback, useEffect, useRef } from 'react';
-import { IoIosSettings } from 'react-icons/io';
-import { FaFilter, FaList, FaLock, FaMoon, FaSun, FaUnlock } from 'react-icons/fa';
+import { IoIosSettings } from './icons';
+import { FaFilter, FaList, FaLock, FaMoon, FaSun, FaUnlock } from './icons';
 import { useTranslation } from 'react-i18next';
 import Button from './components/Button';
 
 import ExportModeButton from './components/ExportModeButton';
 
-import { withBlur } from './util';
+import { withBlur, isMac } from './util';
 import { primaryTextColor, controlsBackground, darkModeTransition } from './colors';
 import useUserSettings from './hooks/useUserSettings';
 import useActionTitle from './hooks/useActionTitle';
@@ -89,7 +89,7 @@ function TopMenu({
   return (
     <div
       className={`no-user-select ${styles['wrapper']}`}
-      style={{ background: controlsBackground, transition: darkModeTransition, display: 'flex', alignItems: 'center', padding: '.3em .3em', gap: '.3em', justifyContent: 'space-between', flexWrap: 'wrap' }}
+      style={{ background: controlsBackground, transition: darkModeTransition, display: 'flex', alignItems: 'center', padding: '.45em .6em', paddingLeft: isMac ? 84 : '.6em', minHeight: 40, boxSizing: 'border-box', gap: '.4em', justifyContent: 'space-between', flexWrap: 'wrap' }}
     >
       {filePath && (
         <>

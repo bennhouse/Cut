@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import semver from 'semver';
-import { FaCode, FaFile } from 'react-icons/fa';
+import { FaCode, FaFile } from '../icons';
 import Markdown from 'react-markdown';
 
 import * as Dialog from './Dialog';

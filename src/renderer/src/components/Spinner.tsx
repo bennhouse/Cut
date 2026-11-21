@@ -1,4 +1,4 @@
-import { FaSpinner } from 'react-icons/fa';
+import { FaSpinner } from '../icons';
 
 export default function Spinner() {
   return (

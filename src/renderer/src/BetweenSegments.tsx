@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { motion } from 'motion/react';
-import { FaTrashAlt, FaSave } from 'react-icons/fa';
+import { FaTrashAlt, FaSave } from './icons';
 
 import { saveColor } from './colors';
 import useUserSettings from './hooks/useUserSettings';

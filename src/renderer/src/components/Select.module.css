@@ -3,14 +3,17 @@
   font: inherit;
   line-height: 1.2;
   font-size: .8em;
-  background-color: var(--gray-3);
+  /* Cut: macOS pop-up button */
+  background-color: var(--gray-a3);
   color: var(--gray-12);
-  border-radius: .3em;
-  padding: 0 1.4em 0 .3em;
-  outline: .05em solid var(--gray-8);
-  border: .05em solid var(--gray-7);
+  border-radius: var(--cut-radius);
+  padding: .1em 1.6em .1em .6em;
+  outline: none;
+  border: .5px solid var(--gray-a6);
+  box-shadow: 0 .5px 1px rgba(0, 0, 0, .12);
 
-  background-image: url("data:image/svg+xml;utf8,<svg fill='rgba(0,0,0,0.6)' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  /* up/down chevrons, as on macOS pop-up buttons */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='none' stroke='rgba(0,0,0,0.55)' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M9 10l3-3 3 3M9 14l3 3 3-3'/></svg>");
   background-repeat: no-repeat;
   background-position-x: 100%;
   background-position-y: 0;
@@ -18,9 +21,13 @@
 }
 
 .select:hover {
-  filter: brightness(1.2);
+  background-color: var(--gray-a4);
+}
+
+.select:focus-visible {
+  outline: 3px solid var(--blue-a8);
 }
 
 :global(.dark-theme) .select {
-  background-image: url("data:image/svg+xml;utf8,<svg fill='rgba(255,255,255,0.6)' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M9 10l3-3 3 3M9 14l3 3 3-3'/></svg>");
 }

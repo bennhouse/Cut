@@ -1,11 +1,11 @@
 import type { CSSProperties, ClipboardEvent, Dispatch, SubmitEvent, KeyboardEvent, SetStateAction } from 'react';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { MdRotate90DegreesCcw } from 'react-icons/md';
+import { MdRotate90DegreesCcw } from './icons';
 import { useTranslation } from 'react-i18next';
-import { IoIosCamera, IoMdKey, IoMdSpeedometer } from 'react-icons/io';
-import { FaYinYang, FaTrashAlt, FaStepBackward, FaStepForward, FaCaretLeft, FaCaretRight, FaPause, FaPlay, FaImages, FaKey, FaExclamationTriangle } from 'react-icons/fa';
-import { GiSoundWaves } from 'react-icons/gi';
+import { IoIosCamera, IoMdKey, IoMdSpeedometer } from './icons';
+import { FaYinYang, FaTrashAlt, FaStepBackward, FaStepForward, FaCaretLeft, FaCaretRight, FaPause, FaPlay, FaImages, FaKey, FaExclamationTriangle } from './icons';
+import { GiSoundWaves } from './icons';
 // import useTraceUpdate from 'use-trace-update';
 import invariant from 'tiny-invariant';
 
@@ -408,7 +408,7 @@ function BottomBar({
 
   const playbackRateRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    playbackRateRef.current?.animate([{ transform: 'scale(2)', color: 'var(--gray-12)', backgroundColor: playbackRate === 1 ? 'var(--cyan-10)' : (playbackRate < 1 ? 'var(--yellow-8)' : 'var(--orange-10)') }, {}], { duration: 200 });
+    playbackRateRef.current?.animate([{ transform: 'scale(2)', color: 'var(--gray-12)', backgroundColor: playbackRate === 1 ? 'var(--blue-10)' : (playbackRate < 1 ? 'var(--yellow-8)' : 'var(--orange-10)') }, {}], { duration: 200 });
   }, [playbackRate]);
 
   function renderJumpCutpointButton(direction: number) {

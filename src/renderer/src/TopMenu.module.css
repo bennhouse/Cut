@@ -1,11 +1,17 @@
-.wrapper button, .wrapper select {
-  background-color: var(--gray-1);
+.wrapper {
+  /* Cut: this bar is the window's title bar: it moves the window, its controls don't */
+  -webkit-app-region: drag;
+  border-bottom: 1px solid var(--cut-hairline);
+}
+
+.wrapper button, .wrapper select, .wrapper input, .wrapper [role="button"] {
+  -webkit-app-region: no-drag;
 }
 
 .wrapper button {
-  padding: .3em .3em;
+  padding: .3em .55em;
 }
 
 .wrapper select {
-  padding: .3em 1.4em .3em .3em;
+  padding: .3em 1.4em .3em .5em;
 }

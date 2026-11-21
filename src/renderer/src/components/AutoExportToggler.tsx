@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaBan, FaFileExport } from 'react-icons/fa';
+import { FaBan, FaFileExport } from '../icons';
 
 import useUserSettings from '../hooks/useUserSettings';
 import Button from './Button';

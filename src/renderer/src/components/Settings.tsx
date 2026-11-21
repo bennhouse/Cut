@@ -1,6 +1,6 @@
 import type { CSSProperties, ChangeEventHandler, TdHTMLAttributes } from 'react';
 import { memo, useCallback, useMemo } from 'react';
-import { FaYinYang, FaKeyboard, FaGlobe, FaBroom, FaCogs, FaHashtag, FaClock, FaFolder, FaFile, FaTimes } from 'react-icons/fa';
+import { FaYinYang, FaKeyboard, FaGlobe, FaBroom, FaCogs, FaHashtag, FaClock, FaFolder, FaFile, FaTimes } from '../icons';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 

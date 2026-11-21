@@ -1,6 +1,6 @@
 {
   "name": "lossless-cut",
-  "productName": "LosslessCut",
+  "productName": "Cut",
   "desktopName": "losslesscut.desktop",
   "description": "The swiss army knife of lossless video/audio editing",
   "copyright": "Copyright © 2026 ${author}",
@@ -174,7 +174,7 @@
       "enableEmbeddedAsarIntegrityValidation": true,
       "onlyLoadAppFromAsar": true
     },
-    "appId": "no.mifi.losslesscut",
+    "appId": "local.cut.Cut",
     "afterPack": "./script/afterPack.ts",
     "artifactName": "${productName}-${os}-${arch}.${ext}",
     "extraResources": [
@@ -186,7 +186,7 @@
     "mac": {
       "hardenedRuntime": true,
       "notarize": true,
-      "appId": "no.mifi.losslesscut-mac",
+      "appId": "local.cut.Cut",
       "category": "public.app-category.productivity",
       "target": [
         {
@@ -210,7 +210,7 @@
           "to": "."
         }
       ],
-      "icon": "icon-build/app.icns",
+      "icon": "macos/AppIcon.icns",
       "fileAssociations": [
         {
           "ext": [

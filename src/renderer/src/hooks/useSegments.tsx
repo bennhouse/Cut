@@ -6,7 +6,7 @@ import pMap from 'p-map';
 import invariant from 'tiny-invariant';
 import sortBy from 'lodash/sortBy';
 import { Trans, useTranslation } from 'react-i18next';
-import { FaLink } from 'react-icons/fa';
+import { FaLink } from '../icons';
 
 import TextInput from '../components/TextInput';
 import { detectSceneChanges as ffmpegDetectSceneChanges, readFrames, mapTimesToSegments, findKeyframeNearTime } from '../ffmpeg';

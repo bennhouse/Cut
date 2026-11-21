@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { memo, useCallback } from 'react';
-import { FaClipboard } from 'react-icons/fa';
+import { FaClipboard } from '../icons';
 import type { MotionStyle } from 'motion/react';
 import { motion, useAnimation } from 'motion/react';
 import { useTranslation } from 'react-i18next';

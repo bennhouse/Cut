@@ -3,7 +3,7 @@ import { memo, useRef, useMemo, useCallback, useEffect } from 'react';
 import { motion, useMotionValue, useSpring } from 'motion/react';
 import debounce from 'lodash/debounce';
 import { useTranslation } from 'react-i18next';
-import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
+import { FaCaretDown, FaCaretUp } from './icons';
 import invariant from 'tiny-invariant';
 
 import TimelineSeg from './TimelineSeg';

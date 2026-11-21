@@ -1,7 +1,7 @@
 import type { CSSProperties, MouseEventHandler } from 'react';
 import { forwardRef } from 'react';
-import { FiScissors } from 'react-icons/fi';
-import { FaFileExport } from 'react-icons/fa';
+import { FiScissors } from '../icons';
+import { FaFileExport } from '../icons';
 import { useTranslation } from 'react-i18next';
 
 import { primaryColor } from '../colors';

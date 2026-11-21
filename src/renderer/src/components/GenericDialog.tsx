@@ -2,7 +2,7 @@ import type { SubmitEventHandler, MouseEventHandler, ReactNode } from 'react';
 import React, { use, useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
-import { FaCheckCircle, FaInfoCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaInfoCircle } from '../icons';
 import { TextField } from '@radix-ui/themes';
 
 import * as Dialog from './Dialog';

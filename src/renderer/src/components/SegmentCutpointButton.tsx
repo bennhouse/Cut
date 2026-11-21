@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import { useMemo } from 'react';
-import type { FaStepForward } from 'react-icons/fa';
+import type { FaStepForward } from '../icons';
 
 import { useSegColors } from '../contexts';
 import useUserSettings from '../hooks/useUserSettings';
