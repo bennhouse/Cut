@@ -18,7 +18,6 @@ function subscribeSystemDarkMode(onChange: () => void) {
   darkModeMediaQuery.addEventListener('change', onChange);
   return () => darkModeMediaQuery.removeEventListener('change', onChange);
 }
-const resolveDarkMode = (theme: Config['theme'], systemDarkMode: boolean) => (theme === 'system' ? systemDarkMode : theme === 'dark');
 
 export default function useUserSettingsRoot() {
   const firstUpdateRef = useRef(true);
@@ -223,9 +222,8 @@ export default function useUserSettingsRoot() {
   // note: main sets nativeTheme.themeSource from `theme`, and it must be 'system' for prefers-color-scheme to report the OS theme
   const systemDarkMode = useSyncExternalStore(subscribeSystemDarkMode, () => darkModeMediaQuery.matches);
 
-  const darkMode = resolveDarkMode(theme, systemDarkMode);
-
-  const toggleDarkMode = useCallback(() => setTheme((t) => (resolveDarkMode(t, darkModeMediaQuery.matches) ? 'light' : 'dark')), []);
+  // Cut: always the system appearance; the stored `theme` is ignored
+  const darkMode = systemDarkMode;
 
   const prefersReducedMotion = useMemo(() => {
     if (reducedMotion !== 'user') return reducedMotion === 'always';
@@ -404,7 +402,6 @@ export default function useUserSettingsRoot() {
     darkMode,
     setTheme,
     setVideoFit,
-    toggleDarkMode,
     setPreferStrongColors,
     setOutputFileNameMinZeroPadding,
     setCutFromAdjustmentFrames,

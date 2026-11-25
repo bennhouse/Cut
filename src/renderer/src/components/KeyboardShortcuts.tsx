@@ -813,7 +813,7 @@ const KeyboardShortcuts = memo(({
   const searchQueryTrimmed = searchQuery.toLowerCase().trim();
   const isSearching = Boolean(searchQueryTrimmed);
 
-  const actionEntries = useMemo(() => (Object.entries(actionsMap) as unknown as [keyof typeof actionsMap, typeof actionsMap[keyof typeof actionsMap]][]).filter(([key, { name, category }]) => (
+  const actionEntries = useMemo(() => (Object.entries(actionsMap) as unknown as [keyof typeof actionsMap, typeof actionsMap[keyof typeof actionsMap]][]).filter(([key, { name, category }]) => key !== 'toggleDarkMode' && ( // Cut: no theme toggle
     !isSearching
     || key.toLocaleLowerCase().includes(searchQueryTrimmed)
     || name.toLowerCase().includes(searchQueryTrimmed)

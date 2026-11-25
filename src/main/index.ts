@@ -187,19 +187,16 @@ function createWindow() {
 
   const win = mainWindow;
   let shown = false;
-  const showWindow = (reason: string) => {
+  function showWindow(reason: string) {
     if (shown || win.isDestroyed()) return;
     shown = true;
     logger.info('Showing the main window', reason);
-    clearTimeout(showFallback);
-    ipcMain.off('window-painted', onPainted);
     if (savedBounds.isMaximized) win.maximize(); // maximize() would show the window
     win.show();
-  };
-  const onPainted = (e: Electron.IpcMainEvent) => { if (e.sender === win.webContents) showWindow('painted'); };
-  ipcMain.on('window-painted', onPainted);
+  }
   // never stay hidden if the renderer fails to report (a crash, an error boundary)
-  const showFallback = setTimeout(() => showWindow('timeout'), 6000);
+  setTimeout(() => showWindow('timeout'), 6000);
+  ipcMain.on('window-painted', (e) => { if (e.sender === win.webContents) showWindow('painted'); });
 
   // Development aid (Cut): with --cut-snapshot <folder> (or CUT_SNAPSHOT=<folder>), a PNG of the
   // window's content is written every second, so the layout can be checked without screen recording.
@@ -426,8 +423,8 @@ async function init() {
 
     // https://www.electronjs.org/docs/latest/tutorial/dark-mode
     // also affects what `prefers-color-scheme` reports in the renderer
-    nativeTheme.themeSource = configStore.get('theme');
-    configStore.onDidChange('theme', (theme) => { nativeTheme.themeSource = theme; });
+    // Cut: always the system appearance (there is no theme choice)
+    nativeTheme.themeSource = 'system';
     nativeTheme.on('updated', () => mainWindow?.setBackgroundColor(getBackgroundColor()));
 
     logger.info('CLI arguments', argv);

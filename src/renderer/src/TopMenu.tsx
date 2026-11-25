@@ -1,7 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { memo, useCallback, useEffect, useRef } from 'react';
-import { IoIosSettings } from './icons';
-import { FaFilter, FaList, FaLock, FaMoon, FaSun, FaUnlock } from './icons';
+import { FaFilter, FaList, FaLock, FaUnlock, IoIosSettings } from './icons';
 import { useTranslation } from 'react-i18next';
 import Button from './components/Button';
 
@@ -34,7 +33,6 @@ function TopMenu({
   toggleSettings,
   selectedSegments,
   isCustomFormatSelected,
-  toggleDarkMode,
 }: {
   filePath: string | undefined,
   fileFormat: string | undefined,
@@ -48,14 +46,12 @@ function TopMenu({
   toggleSettings: () => void,
   selectedSegments: unknown[],
   isCustomFormatSelected: boolean,
-  toggleDarkMode: () => void,
 }) {
   const { t } = useTranslation();
-  const { customOutDir, setCustomOutDir, simpleMode, outFormatLocked, setOutFormatLocked, darkMode } = useUserSettings();
+  const { customOutDir, setCustomOutDir, simpleMode, outFormatLocked, setOutFormatLocked } = useUserSettings();
   const actionTitle = useActionTitle();
   const workingDirButtonRef = useRef<HTMLButtonElement>(null);
 
-  const DarkMode = darkMode ? FaSun : FaMoon;
 
   const onOutFormatLockedClick = useCallback(() => setOutFormatLocked((v) => (v ? undefined : fileFormat)), [fileFormat, setOutFormatLocked]);
 
@@ -136,12 +132,6 @@ function TopMenu({
 
       {filePath && (
         <ExportModeButton selectedSegments={selectedSegments} style={exportModeStyle} />
-      )}
-
-      {!simpleMode && (
-        <Button onClick={toggleDarkMode} title={actionTitle(t('Toggle dark mode'), 'toggleDarkMode')}>
-          <DarkMode style={{ verticalAlign: 'middle', fontSize: '.9em' }} />
-        </Button>
       )}
 
       <Button onClick={toggleSettings} title={actionTitle(t('Settings'), 'toggleSettings')}>
