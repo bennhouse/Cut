@@ -5,6 +5,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 Y=(node .yarn/releases/yarn-4.18.0.cjs)
+swift macos/make-symbols.swift "$PWD" >/dev/null # the SF Symbols of the interface
 $Y electron-vite build >/dev/null
 $Y electron-builder --mac dir --arm64 -c.mac.notarize=false -c.mac.identity=null >/dev/null
 APP=$(ls -d dist/mac-arm64/*.app | head -1)

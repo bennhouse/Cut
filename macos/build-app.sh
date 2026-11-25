@@ -15,6 +15,7 @@ Y=(node .yarn/releases/yarn-4.18.0.cjs)
 [[ -d node_modules ]] || $Y install
 [[ -x ffmpeg/darwin-arm64/ffmpeg && -x ffmpeg/darwin-arm64/ffprobe ]] || node script/downloadFfmpeg.ts darwin-arm64
 
+swift macos/make-symbols.swift "$PWD" >/dev/null # the SF Symbols of the interface
 $Y electron-vite build >/dev/null
 rm -rf dist/mac-arm64
 $Y electron-builder --mac dir --arm64 -c.mac.notarize=false -c.mac.identity=null >/dev/null

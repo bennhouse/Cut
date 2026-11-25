@@ -614,7 +614,7 @@ function BottomBar({
         <div style={{ flexGrow: 1 }} />
 
         <div style={timeWrapperStyle}>
-          <div style={{ fontFamily: 'monospace', letterSpacing: '-0.08em', pointerEvents: 'auto' }}>
+          <div className="cut-timecode" style={{ pointerEvents: 'auto' }}>
             {formatTimecode({ seconds: displayTime })}
             <span style={{ display: 'inline-block', minWidth: '3.5em', marginLeft: '.5em' }}>
               {displayTimeFrameCount ?? 0}<span style={{ opacity: 0.5, userSelect: 'none' }}>f</span>

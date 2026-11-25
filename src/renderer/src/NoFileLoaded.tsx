@@ -1,29 +1,12 @@
-import { Fragment, memo, useMemo, useState } from 'react';
+import { memo, useState } from 'react';
 import type { MotionStyle } from 'motion/react';
 import { motion } from 'motion/react';
-import { FaMouse } from './icons';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import SetCutpointButton from './components/SetCutpointButton';
-import SimpleModeButton from './components/SimpleModeButton';
-import useUserSettings from './hooks/useUserSettings';
 import type { StateSegment } from './types';
 import type { KeyBinding } from '../../common/types';
-import { splitKeyboardKeys } from './util';
-import { getModifier } from './hooks/useTimelineScroll';
-import Kbd from './components/Kbd';
 import mainApi from './mainApi';
 
-
-function Keys({ keys }: { keys: string | undefined }) {
-  if (keys == null || keys === '') {
-    return <kbd>UNBOUND</kbd>;
-  }
-  const split = splitKeyboardKeys(keys);
-  return split.map((key, i) => (
-    <Fragment key={key}><Kbd code={key} />{i < split.length - 1 && <span style={{ fontSize: '.7em', marginLeft: '-.2em', marginRight: '-.2em' }}>{' + '}</span>}</Fragment>
-  ));
-}
 
 const dropzoneStyle: MotionStyle = {
   position: 'absolute',
@@ -47,7 +30,7 @@ const dropzoneStyle: MotionStyle = {
   background: 'var(--gray-a2)',
 };
 
-function NoFileLoaded({ mifiLink, currentCutSeg, onClick, darkMode, keyBindingByAction }: {
+function NoFileLoaded({ mifiLink, onClick, darkMode }: {
   mifiLink: unknown,
   currentCutSeg: StateSegment | undefined,
   onClick: () => void,
@@ -55,10 +38,8 @@ function NoFileLoaded({ mifiLink, currentCutSeg, onClick, darkMode, keyBindingBy
   keyBindingByAction: Record<string, KeyBinding>,
 }) {
   const { t } = useTranslation();
-  const { simpleMode, segmentMouseModifierKey } = useUserSettings();
   const [dragging, setDragging] = useState(false);
 
-  const currentCutSegOrDefault = useMemo(() => currentCutSeg ?? { segColorIndex: 0 }, [currentCutSeg]);
 
   return (
     <motion.div
@@ -71,22 +52,6 @@ function NoFileLoaded({ mifiLink, currentCutSeg, onClick, darkMode, keyBindingBy
       onClick={onClick}
     >
       <div style={{ fontSize: '1.6em', fontWeight: 600, letterSpacing: '.02em', textTransform: 'uppercase', color: 'var(--gray-12)', marginBottom: '.2em' }}>{t('DROP FILE(S)')}</div>
-
-      <div style={{ fontSize: '1.1em', color: 'var(--gray-11)', marginBottom: '.1em' }}>
-        <Trans>See <b>Help</b> menu for help</Trans>
-      </div>
-
-      <div style={{ fontSize: '1.1em', color: 'var(--gray-11)' }}>
-        <Trans><SetCutpointButton currentCutSeg={currentCutSegOrDefault} side="start" style={{ verticalAlign: 'middle' }} /> <SetCutpointButton currentCutSeg={currentCutSegOrDefault} side="end" style={{ verticalAlign: 'middle' }} />, <Keys keys={keyBindingByAction['setCutStart']?.keys} /> <Keys keys={keyBindingByAction['setCutEnd']?.keys} /> or <span><kbd style={{ marginRight: '.1em' }}>{getModifier(segmentMouseModifierKey)}</kbd></span>+<FaMouse style={{ marginRight: '.1em', verticalAlign: 'middle' }} /> to set cutpoints</Trans>
-      </div>
-
-      <div style={{ fontSize: '1.1em', color: 'var(--gray-11)' }} role="button" onClick={(e) => e.stopPropagation()}>
-        {simpleMode ? (
-          <Trans><SimpleModeButton style={{ verticalAlign: 'middle' }} /> to show advanced view</Trans>
-        ) : (
-          <Trans><SimpleModeButton style={{ verticalAlign: 'middle' }} /> to show simple view</Trans>
-        )}
-      </div>
 
       {mifiLink && typeof mifiLink === 'object' && 'loadUrl' in mifiLink && typeof mifiLink.loadUrl === 'string' && mifiLink.loadUrl ? (
         <div style={{ position: 'relative', margin: '.3em', width: '24em', height: '8em' }}>

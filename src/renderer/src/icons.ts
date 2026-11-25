@@ -1,186 +1,97 @@
-// Cut: every icon the interface uses, from one set (Lucide, outline, like the macOS symbols),
-// exported under the names the code imports. LosslessCut mixed Font Awesome, Ionicons, Material and others.
-import {
-  LuArrowDown01,
-  LuArrowDownAZ,
-  LuArrowRight,
-  LuArrowUp01,
-  LuArrowUpAZ,
-  LuAudioWaveform,
-  LuBaby,
-  LuBan,
-  LuBookOpen,
-  LuCamera,
-  LuCaptions,
-  LuCheck,
-  LuChevronDown,
-  LuChevronLeft,
-  LuChevronRight,
-  LuChevronUp,
-  LuCircle,
-  LuCircleAlert,
-  LuCircleCheck,
-  LuCircleHelp,
-  LuCircleX,
-  LuClipboard,
-  LuClipboardList,
-  LuClock,
-  LuCode,
-  LuContrast,
-  LuCopy,
-  LuCopyPlus,
-  LuEraser,
-  LuEye,
-  LuFile,
-  LuFileDigit,
-  LuFileInput,
-  LuFileOutput,
-  LuFilter,
-  LuFolder,
-  LuGauge,
-  LuGlobe,
-  LuHammer,
-  LuHash,
-  LuImage,
-  LuImages,
-  LuInfo,
-  LuKey,
-  LuKeyboard,
-  LuLanguages,
-  LuLink,
-  LuList,
-  LuLoader,
-  LuLock,
-  LuLockOpen,
-  LuMap,
-  LuMapPin,
-  LuMenu,
-  LuMinus,
-  LuMoon,
-  LuMouse,
-  LuNotebookPen,
-  LuPaperclip,
-  LuPause,
-  LuPencil,
-  LuPlay,
-  LuPlus,
-  LuPointer,
-  LuRotateCcw,
-  LuSandwich,
-  LuSave,
-  LuScissors,
-  LuSettings,
-  LuSettings2,
-  LuSkipBack,
-  LuSkipForward,
-  LuSun,
-  LuTableCellsMerge,
-  LuTableCellsSplit,
-  LuTag,
-  LuTrash2,
-  LuTriangleAlert,
-  LuUndo2,
-  LuVideo,
-  LuVideoOff,
-  LuVolume2,
-  LuVolumeX,
-  LuWandSparkles,
-  LuX,
-  LuZap,
-} from 'react-icons/lu';
+// Cut: every icon the interface uses is an SF Symbol (see components/SFSymbol.tsx and macos/make-symbols.swift),
+// exported under the names the code imports (LosslessCut mixed Font Awesome, Ionicons, Material and others).
+import { sf } from './components/SFSymbol';
 
-export {
-  LuTableCellsMerge as AiOutlineMergeCells,
-  LuTableCellsSplit as AiOutlineSplitCells,
-  LuArrowRight as FaArrowRight,
-  LuBaby as FaBaby,
-  LuBan as FaBan,
-  LuZap as FaBolt,
-  LuBookOpen as FaBook,
-  LuEraser as FaBroom,
-  LuChevronDown as FaCaretDown,
-  LuChevronLeft as FaCaretLeft,
-  LuChevronRight as FaCaretRight,
-  LuChevronUp as FaCaretUp,
-  LuCheck as FaCheck,
-  LuCircleCheck as FaCheckCircle,
-  LuChevronDown as FaChevronDown,
-  LuClipboard as FaClipboard,
-  LuClipboardList as FaClipboardList,
-  LuClock as FaClock,
-  LuCopyPlus as FaClone,
-  LuCode as FaCode,
-  LuSettings as FaCog,
-  LuSettings2 as FaCogs,
-  LuCopy as FaCopy,
-  LuPencil as FaEdit,
-  LuCircleAlert as FaExclamationCircle,
-  LuTriangleAlert as FaExclamationTriangle,
-  LuEye as FaEye,
-  LuFile as FaFile,
-  LuFileOutput as FaFileExport,
-  LuFileInput as FaFileImport,
-  LuFilter as FaFilter,
-  LuFolder as FaFolder,
-  LuGlobe as FaGlobe,
-  LuSandwich as FaHamburger,
-  LuHammer as FaHammer,
-  LuPointer as FaHandPointUp,
-  LuHash as FaHashtag,
-  LuWandSparkles as FaHatWizard,
-  LuImage as FaImage,
-  LuImages as FaImages,
-  LuInfo as FaInfo,
-  LuInfo as FaInfoCircle,
-  LuKey as FaKey,
-  LuKeyboard as FaKeyboard,
-  LuLanguages as FaLanguage,
-  LuLink as FaLink,
-  LuList as FaList,
-  LuLock as FaLock,
-  LuMap as FaMap,
-  LuMapPin as FaMapMarkerAlt,
-  LuMinus as FaMinus,
-  LuMoon as FaMoon,
-  LuMouse as FaMouse,
-  LuPaperclip as FaPaperclip,
-  LuPause as FaPause,
-  LuPlay as FaPlay,
-  LuPlus as FaPlus,
-  LuCircleHelp as FaQuestionCircle,
-  LuCircleCheck as FaRegCheckCircle,
-  LuCircle as FaRegCircle,
-  LuCircleX as FaRegTimesCircle,
-  LuSave as FaSave,
-  LuArrowDownAZ as FaSortAlphaDown,
-  LuArrowUpAZ as FaSortAlphaUp,
-  LuArrowDown01 as FaSortNumericDown,
-  LuArrowUp01 as FaSortNumericUp,
-  LuLoader as FaSpinner,
-  LuSkipBack as FaStepBackward,
-  LuSkipForward as FaStepForward,
-  LuSun as FaSun,
-  LuTag as FaTag,
-  LuX as FaTimes,
-  LuTrash2 as FaTrash,
-  LuTrash2 as FaTrashAlt,
-  LuUndo2 as FaUndo,
-  LuLockOpen as FaUnlock,
-  LuVideo as FaVideo,
-  LuVideoOff as FaVideoSlash,
-  LuVolumeX as FaVolumeMute,
-  LuVolume2 as FaVolumeUp,
-  LuContrast as FaYinYang,
-  LuScissors as FiScissors,
-  LuAudioWaveform as GiSoundWaves,
-  LuFileDigit as GoFileBinary,
-  LuCamera as IoIosCamera,
-  LuCircleHelp as IoIosHelpCircle,
-  LuSettings as IoIosSettings,
-  LuKey as IoMdKey,
-  LuMenu as IoMdMenu,
-  LuGauge as IoMdSpeedometer,
-  LuNotebookPen as MdEventNote,
-  LuRotateCcw as MdRotate90DegreesCcw,
-  LuCaptions as MdSubtitles,
-};
+export const AiOutlineMergeCells = sf('arrow.triangle.merge');
+export const AiOutlineSplitCells = sf('arrow.triangle.branch');
+export const FaArrowRight = sf('arrow.right');
+export const FaBaby = sf('slider.horizontal.3');
+export const FaBan = sf('nosign');
+export const FaBolt = sf('bolt');
+export const FaBook = sf('book');
+export const FaBroom = sf('sparkles');
+export const FaCaretDown = sf('chevron.down');
+export const FaCaretLeft = sf('chevron.left');
+export const FaCaretRight = sf('chevron.right');
+export const FaCaretUp = sf('chevron.up');
+export const FaCheck = sf('checkmark');
+export const FaCheckCircle = sf('checkmark.circle');
+export const FaChevronDown = sf('chevron.down');
+export const FaClipboard = sf('doc.on.clipboard');
+export const FaClipboardList = sf('list.bullet.clipboard');
+export const FaClock = sf('clock');
+export const FaClone = sf('plus.square.on.square');
+export const FaCode = sf('chevron.left.forwardslash.chevron.right');
+export const FaCog = sf('gearshape');
+export const FaCogs = sf('slider.horizontal.3');
+export const FaCopy = sf('doc.on.doc');
+export const FaEdit = sf('pencil');
+export const FaExclamationCircle = sf('exclamationmark.circle');
+export const FaExclamationTriangle = sf('exclamationmark.triangle');
+export const FaEye = sf('eye');
+export const FaFile = sf('doc');
+export const FaFileExport = sf('square.and.arrow.up');
+export const FaFileImport = sf('square.and.arrow.down');
+export const FaFilter = sf('line.3.horizontal.decrease');
+export const FaFolder = sf('folder');
+export const FaGlobe = sf('globe');
+export const FaHamburger = sf('line.3.horizontal');
+export const FaHammer = sf('hammer');
+export const FaHandPointUp = sf('arrow.right.to.line');
+export const FaHashtag = sf('number');
+export const FaHatWizard = sf('wand.and.stars');
+export const FaImage = sf('photo');
+export const FaImages = sf('photo.on.rectangle');
+export const FaInfo = sf('info.circle');
+export const FaInfoCircle = sf('info.circle');
+export const FaKey = sf('key');
+export const FaKeyboard = sf('keyboard');
+export const FaLanguage = sf('character.bubble');
+export const FaLink = sf('link');
+export const FaList = sf('list.bullet');
+export const FaLock = sf('lock');
+export const FaMap = sf('map');
+export const FaMapMarkerAlt = sf('mappin.and.ellipse');
+export const FaMinus = sf('minus');
+export const FaMoon = sf('moon');
+export const FaMouse = sf('computermouse');
+export const FaPaperclip = sf('paperclip');
+export const FaPause = sf('pause.fill');
+export const FaPlay = sf('play.fill');
+export const FaPlus = sf('plus');
+export const FaQuestionCircle = sf('questionmark.circle');
+export const FaRegCheckCircle = sf('checkmark.circle');
+export const FaRegCircle = sf('circle');
+export const FaRegTimesCircle = sf('xmark.circle');
+export const FaSave = sf('square.and.arrow.down');
+export const FaSortAlphaDown = sf('arrow.up.arrow.down');
+export const FaSortAlphaUp = sf('arrow.up.arrow.down');
+export const FaSortNumericDown = sf('arrow.up.arrow.down');
+export const FaSortNumericUp = sf('arrow.up.arrow.down');
+export const FaSpinner = sf('arrow.triangle.2.circlepath');
+export const FaStepBackward = sf('backward.end.fill');
+export const FaStepForward = sf('forward.end.fill');
+export const FaSun = sf('sun.max');
+export const FaTag = sf('tag');
+export const FaTimes = sf('xmark');
+export const FaTrash = sf('trash');
+export const FaTrashAlt = sf('trash');
+export const FaUndo = sf('arrow.uturn.backward');
+export const FaUnlock = sf('lock.open');
+export const FaVideo = sf('video');
+export const FaVideoSlash = sf('video.slash');
+export const FaVolumeMute = sf('speaker.slash');
+export const FaVolumeUp = sf('speaker.wave.2');
+export const FaYinYang = sf('circle.lefthalf.filled');
+export const FiScissors = sf('scissors');
+export const GiSoundWaves = sf('waveform');
+export const GoFileBinary = sf('doc.text');
+export const IoIosCamera = sf('camera');
+export const IoIosHelpCircle = sf('questionmark.circle');
+export const IoIosSettings = sf('gearshape');
+export const IoMdKey = sf('key');
+export const IoMdMenu = sf('line.3.horizontal');
+export const IoMdSpeedometer = sf('gauge.with.dots.needle.67percent');
+export const MdEventNote = sf('note.text');
+export const MdRotate90DegreesCcw = sf('rotate.left');
+export const MdSubtitles = sf('captions.bubble');

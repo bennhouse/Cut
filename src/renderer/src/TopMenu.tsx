@@ -17,8 +17,8 @@ import OutDirSelector from './components/OutDirSelector';
 const { stat } = window.require('node:fs/promises');
 const { webUtils } = window.require('electron');
 
-const outFmtStyle = { maxWidth: 100 };
-const exportModeStyle = { flexGrow: 0, flexBasis: 140 };
+const outFmtStyle = {};
+const exportModeStyle = {};
 
 function TopMenu({
   filePath,

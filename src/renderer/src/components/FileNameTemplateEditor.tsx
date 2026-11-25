@@ -256,7 +256,7 @@ function FileNameTemplateEditor(opts: {
               <div style={{ fontSize: '.9em', color: 'var(--gray-11)', display: 'flex', gap: '.3em', flexWrap: 'wrap', alignItems: 'center', marginBottom: '.7em' }}>
                 {`${t('Variables')}:`}
 
-                <IoIosHelpCircle fontSize="1.3em" color="var(--gray-12)" role="button" cursor="pointer" onClick={() => mainApi.openExternal(exportedFileNameTemplateHelpUrl)} />
+                <IoIosHelpCircle style={{ fontSize: '1.3em', cursor: 'pointer' }} color="var(--gray-12)" role="button" onClick={() => mainApi.openExternal(exportedFileNameTemplateHelpUrl)} />
                 {availableVariables.map((variable) => (
                   <span key={variable} role="button" style={{ cursor: 'copy', marginRight: '.2em', textDecoration: 'underline', textDecorationStyle: 'dashed', fontSize: '.9em' }} onClick={() => onVariableClick(variable)}>{variable}</span>
                 ))}

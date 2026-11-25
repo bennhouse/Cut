@@ -60,7 +60,7 @@ function BatchFile({ path, index, isOpen, isSelected, name, onSelect, onDelete, 
     e.currentTarget.blur();
   }, [onSelect, path]);
 
-  const handleDeleteClick = useCallback<MouseEventHandler<SVGElement>>((e) => {
+  const handleDeleteClick = useCallback<MouseEventHandler<HTMLElement>>((e) => {
     e.stopPropagation();
     onDelete?.(path);
     e.currentTarget.blur();

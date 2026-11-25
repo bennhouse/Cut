@@ -25,3 +25,6 @@ tsconfig.*.tsbuildinfo
 # Cut
 /signing
 /build
+
+# SF Symbols rendered from the system at build time (macos/make-symbols.swift)
+/src/renderer/public/symbols

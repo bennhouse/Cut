@@ -22,7 +22,7 @@ https://www.radix-ui.com/docs/colors/palette-composition/understanding-the-scale
 html {
   /* Cut: the system font (SF Pro on macOS), a little smaller, like native apps */
   font-family: system-ui, -apple-system, 'Noto Sans', sans-serif;
-  font-size: 15px;
+  font-size: 13px;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -47,6 +47,27 @@ body {
   overflow: hidden;
   color: white;
   background: #1e1e1e;
+}
+@media (prefers-color-scheme: light) {
+  body { background: #ececec; }
+}
+
+/* Cut: SF Symbols that act as buttons (components/SFSymbol.tsx): a quiet rounded hover, no hand cursor */
+.sfsym[role=button] {
+  cursor: default;
+  border-radius: 6px;
+}
+.sfsym[role=button]:hover {
+  background-color: var(--gray-a4);
+}
+.sfsym[role=button]:active {
+  background-color: var(--gray-a5);
+}
+
+/* Cut: timecodes in the system font with fixed-width digits */
+.cut-timecode {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
 }
 
 /* https://github.com/electron/electron/issues/2538 */
@@ -153,9 +174,9 @@ input:focus-visible, select:focus-visible {
   100% { transform: rotate(360deg); }
 }
 
-/* because some people have a hard time finding the button */
+/* Cut: no bouncing export button */
 .export-animation {
-  animation: bounce 5s linear infinite;
+  animation: none;
 }
 
 .spinner-animation {

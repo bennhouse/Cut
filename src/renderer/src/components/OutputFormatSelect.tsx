@@ -17,6 +17,10 @@ function renderFormatOptions(formats: FfmpegFormat[]) {
   ));
 }
 
+// Cut: the short name shown on the pop-up (the menu lists the full names)
+const shortFormatNames: Record<string, string> = { matroska: 'MKV', mpegts: 'TS', ipod: 'M4A', webvtt: 'VTT', image2: 'Image' };
+const shortFormatName = (format: string | undefined) => (format ? (shortFormatNames[format] ?? format.toUpperCase()) : undefined);
+
 function OutputFormatSelect({ style, disabled, detectedFileFormat, fileFormat, onOutputFormatUserChange }: {
   style: CSSProperties,
   disabled?: boolean,
@@ -34,7 +38,7 @@ function OutputFormatSelect({ style, disabled, detectedFileFormat, fileFormat, o
   const otherFormats = useMemo(() => (Object.keys(allOutFormats) as (keyof typeof allOutFormats)[]).filter((format) => !commonFormatsAndDetectedFormat.has(format)), [commonFormatsAndDetectedFormat]);
 
   return (
-    <Select style={style} disabled={disabled} value={fileFormat || ''} title={t('Output container format:')} onChange={withBlur((e) => onOutputFormatUserChange(e.target.value))}>
+    <Select style={style} label={shortFormatName(fileFormat) ?? t('Format')} disabled={disabled} value={fileFormat || ''} title={`${t('Output container format:')} ${fileFormat ? `${fileFormat} - ${(allOutFormats as Record<string, string>)[fileFormat] ?? ''}` : ''}`} onChange={withBlur((e) => onOutputFormatUserChange(e.target.value))}>
       <option key="disabled1" value="" disabled>{t('Output container format:')}</option>
 
       {detectedFileFormat && (
