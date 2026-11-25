@@ -93,7 +93,6 @@ function Timeline({
   commandedTime,
   relevantTime,
   zoom,
-  neighbouringKeyFrames,
   seekAbs,
   cutSegments,
   setCurrentSegIndex,
@@ -104,10 +103,7 @@ function Timeline({
   waveforms,
   overviewWaveform,
   shouldShowWaveform,
-  shouldShowKeyframes,
   thumbnails,
-  zoomWindowStartTime,
-  zoomWindowEndTime,
   onZoomWindowStartTimeChange,
   onGenerateOverviewWaveformClick,
   waveformEnabled,
@@ -166,12 +162,6 @@ function Timeline({
   const timelineWrapperRef = useRef<HTMLDivElement>(null);
 
   const isZoomed = zoom > 1;
-
-  const keyFramesInZoomWindow = useMemo(() => (zoomWindowEndTime == null ? [] : neighbouringKeyFrames.filter((f) => f.time >= zoomWindowStartTime && f.time <= zoomWindowEndTime)), [neighbouringKeyFrames, zoomWindowEndTime, zoomWindowStartTime]);
-
-  // Don't show keyframes if too packed together (at current zoom)
-  // See https://github.com/mifi/lossless-cut/issues/259
-  const areKeyframesTooClose = keyFramesInZoomWindow.length > zoom * 200;
 
   const calculateTimelinePercent = useCallback((time: number) => calculateTimelinePercent2(time, fileDurationNonZero), [fileDurationNonZero]);
   const currentTimePercent = useMemo(() => calculateTimelinePercent2(playerTime, fileDurationNonZero), [fileDurationNonZero, playerTime]);
@@ -449,10 +439,7 @@ function Timeline({
             );
           })}
 
-          {shouldShowKeyframes && !areKeyframesTooClose && keyFramesInZoomWindow.map((f) => (
-            <div key={f.time} style={{ position: 'absolute', top: 0, bottom: 0, left: `${(f.time / fileDurationNonZero) * 100}%`, marginLeft: -1, width: 1, background: 'var(--gray-10)', boxShadow: '1px 0 0 var(--gray-1)', pointerEvents: 'none' }} />
-          ))}
-
+          {/* Cut: no keyframe lines on the timeline (with long-GOP camera files they cover it); keyframes are still read for cutting and seeking */}
           {currentTimePercent !== undefined && (
             <motion.div transition={springAnimation} animate={{ left: currentTimePercent }} style={{ position: 'absolute', bottom: 0, top: 0, backgroundColor: 'var(--gray-12)', width: currentTimeWidth, boxShadow: outlineShadow, pointerEvents: 'none' }} />
           )}
