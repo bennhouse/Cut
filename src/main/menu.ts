@@ -74,6 +74,12 @@ export default ({ app, mainWindow, newVersion, isStoreBuild, openExternal }: {
           label: esc(t('Close')),
           accelerator: 'CmdOrCtrl+W',
           async click() {
+            // Cut: ⌘W in the Settings window closes that window, not the file
+            const focused = electron.BrowserWindow.getFocusedWindow();
+            if (focused != null && focused !== mainWindow) {
+              focused.close();
+              return;
+            }
             mainWindow.webContents.send('closeCurrentFile');
           },
         },

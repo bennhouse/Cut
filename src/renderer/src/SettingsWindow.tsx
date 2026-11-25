@@ -6,6 +6,7 @@ import type { CSSProperties } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MotionConfig } from 'motion/react';
 import { Theme } from '@radix-ui/themes';
+import { useTranslation } from 'react-i18next';
 
 import useUserSettingsRoot from './hooks/useUserSettingsRoot';
 import useDirectoryAccess from './hooks/useDirectoryAccess';
@@ -25,6 +26,7 @@ const { ipcRenderer } = window.require('electron');
 const relay = (action: string, arg?: unknown) => ipcRenderer.send('settingsAction', action, arg);
 
 export default function SettingsWindow() {
+  const { t } = useTranslation();
   const allUserSettings = useUserSettingsRoot();
   const { settings, darkMode, prefersReducedMotion, customOutDir, setCustomOutDir, setCaptureFormat, setKeyframeCut, setExportConfirmEnabled, setSimpleMode, setSafeOutputFileName } = allUserSettings;
   const { simpleMode, autoMerge, autoDeleteMergedSegments, segmentsToChaptersOnly, reducedMotion } = settings;
@@ -77,6 +79,10 @@ export default function SettingsWindow() {
   const onKeyboardShortcutsDialogRequested = useCallback(() => relay('keyboardShortcuts'), []);
   const askForCleanupChoices = useCallback(async () => relay('cleanupChoices'), []);
   const toggleStoreProjectInWorkingDir = useCallback(async () => relay('toggleStoreProjectInWorkingDir'), []);
+
+  useEffect(() => {
+    document.title = t('Settings');
+  }, [t]);
 
   useEffect(() => {
     // a settings window uses the smaller text of macOS settings panes

@@ -12,6 +12,10 @@ import { decodeText, safeCreateBlob } from '../util';
 const { ffmpeg } = window.require('@electron/remote').require('./index.js');
 
 const chunkSec = 20;
+// longest keyframe interval a preview may stand for (camera files: 0.5-1 s)
+const maxGopSec = 2;
+// memory bound: about 40 minutes of a Sony XAVC S clip (keyframe every 0.5 s, ~20 KB per preview)
+const maxBytes = 100e6;
 
 // Only where native seeking is slow enough to need it
 export function needsScrubPreview(videoStream: FFprobeStream | undefined, formatBitRate: string | undefined) {
@@ -56,8 +60,9 @@ export default function useScrubPreview({ filePath, videoStreamIndex, duration, 
 
     const abortController = new AbortController();
     const urls: string[] = [];
+    let bytes = 0;
     (async () => {
-      for (let from = 0; from < duration && !abortController.signal.aborted; from += chunkSec) {
+      for (let from = 0; from < duration && !abortController.signal.aborted && bytes < maxBytes; from += chunkSec) {
         const args = [
           '-hide_banner', '-nostats',
           // slice threads: with -skip_frame, FFmpeg's frame threads make keyframe-only decoding 4x slower
@@ -88,6 +93,7 @@ export default function useScrubPreview({ filePath, videoStreamIndex, duration, 
             const time = times[i]!;
             // -ss snaps back to the previous keyframe, which the previous chunk already has
             if (time < from - 0.001 && from !== 0) continue;
+            bytes += jpegs[i]!.length;
             const url = URL.createObjectURL(safeCreateBlob(jpegs[i]!, { type: 'image/jpeg' }));
             urls.push(url);
             newFrames.push({ time, url });
@@ -120,7 +126,9 @@ export default function useScrubPreview({ filePath, videoStreamIndex, duration, 
       if (frames[mid]!.time <= time) lo = mid;
       else hi = mid - 1;
     }
-    return frames[lo];
+    const frame = frames[lo]!;
+    // only a keyframe of the cursor's own GOP: past what has been generated so far, show none
+    return frame.time <= time && time - frame.time <= maxGopSec ? frame : undefined;
   };
 
   return { ready, getFrameAt };
