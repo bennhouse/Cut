@@ -23,7 +23,29 @@ export default ({ app, mainWindow, newVersion, isStoreBuild, openExternal }: {
 }) => {
   // todo TS mainWindow.webContents.send
   const menu: (MenuItemConstructorOptions | MenuItem)[] = [
-    ...(process.platform === 'darwin' ? [{ role: 'appMenu' as const }] : []),
+    // Cut: the app menu of a Mac app, with Settings… in it
+    ...(process.platform === 'darwin' ? [{
+      label: app.name,
+      submenu: [
+        { role: 'about' as const },
+        { type: 'separator' as const },
+        {
+          label: `${esc(t('Settings'))}…`,
+          accelerator: 'CmdOrCtrl+,',
+          click() {
+            mainWindow.webContents.send('toggleSettings');
+          },
+        },
+        { type: 'separator' as const },
+        { role: 'services' as const },
+        { type: 'separator' as const },
+        { role: 'hide' as const },
+        { role: 'hideOthers' as const },
+        { role: 'unhide' as const },
+        { type: 'separator' as const },
+        { role: 'quit' as const },
+      ],
+    }] : []),
 
     {
       label: esc(t('File')),
@@ -213,14 +235,16 @@ export default ({ app, mainWindow, newVersion, isStoreBuild, openExternal }: {
         },
         { type: 'separator' },
 
-        { type: 'separator' },
-        {
-          label: esc(t('Settings')),
-          accelerator: 'CmdOrCtrl+,',
-          click() {
-            mainWindow.webContents.send('toggleSettings');
+        ...(process.platform !== 'darwin' ? [
+          { type: 'separator' } as const,
+          {
+            label: esc(t('Settings')),
+            accelerator: 'CmdOrCtrl+,',
+            click() {
+              mainWindow.webContents.send('toggleSettings');
+            },
           },
-        },
+        ] : []),
         // Due to Apple Review Guidelines, we cannot include an Exit menu item here
         // Apple has their own Quit from the app menu
         ...(process.platform !== 'darwin' ? [

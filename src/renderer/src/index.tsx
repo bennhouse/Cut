@@ -26,6 +26,7 @@ import '@radix-ui/themes/styles.css';
 
 import type { KeyboardLayoutMap } from './types';
 import App from './App';
+import SettingsWindow from './SettingsWindow';
 import ErrorBoundary from './ErrorBoundary';
 import './i18n';
 
@@ -79,7 +80,7 @@ root.render(
   <StrictMode>
     <ErrorBoundary>
       <Suspense fallback={<div />}>
-        <App />
+        {window.location.hash === '#settings' ? <SettingsWindow /> : <App />}
       </Suspense>
     </ErrorBoundary>
   </StrictMode>,

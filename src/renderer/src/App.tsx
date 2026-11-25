@@ -35,7 +35,6 @@ import TopMenu from './TopMenu';
 import LastCommands from './LastCommands';
 import StreamsSelector from './StreamsSelector';
 import SegmentList from './SegmentList';
-import Settings from './components/Settings';
 import Timeline from './Timeline';
 import BottomBar from './BottomBar';
 import ExportConfirm from './components/ExportConfirm';
@@ -174,7 +173,6 @@ function App() {
   const lastOpenedPathRef = useRef<string>(undefined);
   const [showRightBar, setShowRightBar] = useState(true);
   const [lastCommandsVisible, setLastCommandsVisible] = useState(false);
-  const [settingsVisible, setSettingsVisible] = useState(false);
   const [tunerVisible, setTunerVisible] = useState<TunerType>();
   const [keyboardShortcutsVisible, setKeyboardShortcutsVisible] = useState(false);
   const [mifiLink, setMifiLink] = useState<unknown>();
@@ -196,7 +194,6 @@ function App() {
   const { captureFormat, keyframeCut, preserveMetadata, preserveMetadataOnMerge, preserveMovData, preserveChapters, movFastStart, avoidNegativeTs, autoMerge, timecodeFormat, invertCutSegments, autoExportExtraStreams, askBeforeClose, enableImportChapters, enableAskForFileOpenAction, playbackVolume, autoSaveProjectFile, wheelSensitivity, waveformHeight, invertTimelineScroll, language, ffmpegExperimental, hideNotifications, hideOsNotifications, autoLoadTimecode, autoDeleteMergedSegments, exportConfirmEnabled, segmentsToChapters, simpleMode, cutFileTemplate, cutMergedFileTemplate, mergedFileTemplate, keyboardSeekAccFactor, keyboardNormalSeekSpeed, keyboardSeekSpeed2, keyboardSeekSpeed3, treatInputFileModifiedTimeAsStart, treatOutputFileModifiedTimeAsStart, outFormatLocked, safeOutputFileName, enableAutoHtml5ify, segmentsToChaptersOnly, keyBindings, enableSmartCut, customFfPath, storeProjectInWorkingDir, enableOverwriteOutput, mouseWheelZoomModifierKey, mouseWheelFrameSeekModifierKey, mouseWheelKeyframeSeekModifierKey, captureFrameMethod, captureFrameQuality, captureFrameFileNameFormat, enableNativeHevc, cleanupChoices, preferStrongColors, outputFileNameMinZeroPadding, cutFromAdjustmentFrames, cutToAdjustmentFrames, waveformMode: waveformModePreference, thumbnailsEnabled, keyframesEnabled, reducedMotion, ffmpegHwaccel, videoFit } = allUserSettings.settings;
   const { setCaptureFormat, setCustomOutDir, setKeyframeCut, setPlaybackVolume, setExportConfirmEnabled, setSimpleMode, setOutFormatLocked, setSafeOutputFileName, setKeyBindings, resetKeyBindings, setStoreProjectInWorkingDir, setCleanupChoices, darkMode, setWaveformMode, setThumbnailsEnabled, setKeyframesEnabled, prefersReducedMotion, customOutDir } = allUserSettings;
 
-  const [showAdvancedSettings, setShowAdvancedSettings] = useState(!simpleMode);
 
   const { withErrorHandling, handleError, genericError, setGenericError } = useErrorHandling();
 
@@ -1565,7 +1562,8 @@ function App() {
   }, [storeProjectInWorkingDir, setWorking, loadEdlFile, getEdlFilePath, enableImportChapters, ensureAccessToSourceDir, loadCutSegments, autoLoadTimecode, enableNativeHevc, ensureWritableOutDir, customOutDir, resetState, clearSegColorCounter, setCopyStreamIdsForPath, setDetectedFileFormat, outFormatLocked, setUsingDummyVideo, setPreviewFilePath, html5ifyAndLoadWithPreferences, setFileFormat, showNotification, showPreviewFileLoadedMessage, showNotNativelySupportedMessage]);
 
   const toggleLastCommands = useCallback(() => setLastCommandsVisible((val) => !val), []);
-  const toggleSettings = useCallback(() => setSettingsVisible((val) => !val), []);
+  // Cut: settings open in their own window
+  const toggleSettings = useCallback(() => ipcRenderer.send('openSettingsWindow'), []);
 
   const seekClosestKeyframe = useCallback((direction: number) => {
     const sigma = detectedFps ? (1 / detectedFps) : 0.1; // because we don't want it to find the keyframe we're currently at.
@@ -2480,12 +2478,23 @@ function App() {
   ), [detectedFileFormat, fileFormat, onOutputFormatUserChange]);
 
   const onTunerRequested = useCallback((type: TunerType) => {
-    setSettingsVisible(false);
     setTunerVisible(type);
     if (type === 'waveformHeight') {
       setWaveformMode('waveform');
     }
   }, [setWaveformMode]);
+
+  // Cut: buttons in the settings window that open something here (relayed by main)
+  useEffect(() => {
+    const onSettingsAction = (_e: unknown, action: string, arg: unknown) => {
+      if (action === 'tuner') onTunerRequested(arg as TunerType);
+      else if (action === 'keyboardShortcuts') setKeyboardShortcutsVisible(true);
+      else if (action === 'cleanupChoices') askForCleanupChoices().catch(handleError);
+      else if (action === 'toggleStoreProjectInWorkingDir') toggleStoreProjectInWorkingDir().catch(handleError);
+    };
+    ipcRenderer.on('settingsAction', onSettingsAction);
+    return () => { ipcRenderer.off('settingsAction', onSettingsAction); };
+  }, [askForCleanupChoices, handleError, onTunerRequested, toggleStoreProjectInWorkingDir]);
 
   useEffect(() => {
     // Cut: LosslessCut's news/donation link isn't loaded.
@@ -2835,26 +2844,6 @@ function App() {
                 </Dialog.Root>
 
                 <LastCommands visible={lastCommandsVisible} onTogglePress={toggleLastCommands} ffmpegCommandLog={ffmpegCommandLog} setFfmpegCommandLog={setFfmpegCommandLog} />
-
-                <Dialog.Root open={settingsVisible} onOpenChange={toggleSettings}>
-                  <Dialog.Portal>
-                    <Dialog.Overlay />
-                    <Dialog.Content style={{ width: '60em' }}>
-                      <Dialog.Title>{t('Settings')}</Dialog.Title>
-                      <Dialog.Description>{t('Hover mouse over buttons in the main interface to see which function they have')}</Dialog.Description>
-
-                      <Settings
-                        onTunerRequested={onTunerRequested}
-                        onKeyboardShortcutsDialogRequested={toggleKeyboardShortcuts}
-                        askForCleanupChoices={askForCleanupChoices}
-                        toggleStoreProjectInWorkingDir={toggleStoreProjectInWorkingDir}
-                        showAdvancedSettings={showAdvancedSettings}
-                        setShowAdvancedSettings={setShowAdvancedSettings}
-                      />
-                      <Dialog.CloseButton />
-                    </Dialog.Content>
-                  </Dialog.Portal>
-                </Dialog.Root>
 
                 <ConcatDialog isShown={batchFiles.length > 0 && concatDialogOpen} onHide={() => setConcatDialogOpen(false)} paths={batchFilePaths} mergedFileTemplate={mergedFileTemplateOrDefault} generateMergedFileNames={generateMergedFileNames} onConcat={userConcatFiles} setAlwaysConcatMultipleFiles={setAlwaysConcatMultipleFiles} alwaysConcatMultipleFiles={alwaysConcatMultipleFiles} fileFormat={fileFormat} setFileFormat={setFileFormat} detectedFileFormat={detectedFileFormat} setDetectedFileFormat={setDetectedFileFormat} onOutputFormatUserChange={onOutputFormatUserChange} />
 

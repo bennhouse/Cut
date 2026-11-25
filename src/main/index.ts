@@ -71,6 +71,7 @@ let filesToOpen: string[] = [];
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: BrowserWindow | null;
+let settingsWindow: BrowserWindow | null = null;
 
 let askBeforeClose = false;
 let rendererReady = false;
@@ -208,6 +209,11 @@ function createWindow() {
       mainWindow.webContents.capturePage()
         .then((image) => writeFile(join(snapshotDir, 'window.png'), image.toPNG()))
         .catch((err: unknown) => logger.warn('snapshot failed', err));
+      if (settingsWindow != null && !settingsWindow.isDestroyed()) {
+        settingsWindow.webContents.capturePage()
+          .then((image) => writeFile(join(snapshotDir, 'settings.png'), image.toPNG()))
+          .catch((err: unknown) => logger.warn('snapshot failed', err));
+      }
     }, 1000);
   }
 
@@ -228,6 +234,8 @@ function createWindow() {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null;
+    // Cut: the settings window belongs to the main window
+    if (settingsWindow != null && !settingsWindow.isDestroyed()) settingsWindow.close();
   });
 
   // https://stackoverflow.com/questions/39574636/prompt-to-save-quit-before-closing-window/47434365
@@ -258,6 +266,55 @@ function createWindow() {
   mainWindow.on('unmaximize', debouncedSaveWindowState);
   mainWindow.on('resize', debouncedSaveWindowState);
   mainWindow.on('move', debouncedSaveWindowState);
+}
+
+// Cut: settings open in their own window (like the other apps of the suite), not in a sheet. It runs
+// the same renderer with #settings; both windows read and write the same config store and tell each
+// other about changes ('configChanged'). Buttons in it that need the main window are relayed there.
+function openSettingsWindow() {
+  if (settingsWindow != null && !settingsWindow.isDestroyed()) {
+    settingsWindow.show();
+    settingsWindow.focus();
+    return;
+  }
+  const win = new BrowserWindow({
+    title: i18n.t('Settings'),
+    width: 720,
+    height: 680,
+    minWidth: 560,
+    minHeight: 400,
+    show: false,
+    fullscreenable: false,
+    minimizable: false,
+    backgroundColor: getBackgroundColor(),
+    ...(mainWindow != null && !mainWindow.isDestroyed() ? (() => {
+      // centred over the main window
+      const b = mainWindow.getBounds();
+      return { x: Math.round(b.x + (b.width - 720) / 2), y: Math.round(b.y + Math.max(0, (b.height - 680) / 2)) };
+    })() : {}),
+    webPreferences: {
+      contextIsolation: false,
+      nodeIntegration: true,
+      webSecurity: !isDev,
+      preload: fileURLToPath(new URL('../preload/index.cjs', import.meta.url)),
+    },
+  });
+  settingsWindow = win;
+  remote.enable(win.webContents);
+  attachContextMenu(win);
+  const onPainted = (e: Electron.IpcMainEvent) => {
+    if (e.sender !== win.webContents || win.isDestroyed()) return;
+    ipcMain.off('window-painted', onPainted);
+    win.show();
+  };
+  ipcMain.on('window-painted', onPainted);
+  setTimeout(() => { if (!win.isDestroyed() && !win.isVisible()) win.show(); }, 4000);
+  win.on('closed', () => {
+    ipcMain.off('window-painted', onPainted);
+    if (settingsWindow === win) settingsWindow = null;
+  });
+  if (isDev) win.loadURL('http://localhost:3001/#settings');
+  else win.loadFile('out/renderer/index.html', { hash: 'settings' });
 }
 
 async function openExternal(url: string) {
@@ -402,6 +459,20 @@ async function init() {
     });
 
     ipcMain.on('setLanguage', (_e, newLanguage) => changeLanguage(newLanguage));
+
+    ipcMain.on('openSettingsWindow', () => openSettingsWindow());
+    // a setting changed in one window: the others reload it
+    ipcMain.on('configChanged', (e, key: string) => {
+      for (const win of BrowserWindow.getAllWindows()) {
+        if (win.webContents !== e.sender) win.webContents.send('configChanged', key);
+      }
+    });
+    // buttons in the settings window that open something in the main window
+    ipcMain.on('settingsAction', (_e, action: string, arg: unknown) => {
+      if (mainWindow == null || mainWindow.isDestroyed()) return;
+      mainWindow.focus();
+      mainWindow.webContents.send('settingsAction', action, arg);
+    });
 
     ipcMain.handle('tryTrashItem', async (_e, path) => {
       try {

@@ -9,6 +9,7 @@ import isDev from '../isDev';
 import { mySpring, emitter as animationsEmitter } from '../animations';
 
 const remote = window.require('@electron/remote');
+const { ipcRenderer } = window.require('electron');
 const { systemPreferences } = remote;
 const { configStore } = remote.require('./index.js');
 
@@ -27,12 +28,14 @@ export default function useUserSettingsRoot() {
     const key = entry[0] as T;
     const value = entry[1] as Config[T];
 
-    // Prevent flood-saving all config during mount
-    if (firstUpdateRef.current) return;
-
+    // Prevent flood-saving all config during mount.
+    // Cut: also skip values the store already has (a change made in the other window comes back
+    // here through the state); otherwise save and tell the other window (settings / main)
+    if (firstUpdateRef.current || JSON.stringify(configStore.get(key)) === JSON.stringify(value)) return;
     if (isDev) console.log('save', key, value);
     try {
       configStore.set(key, value);
+      ipcRenderer.send('configChanged', key);
     } catch (err) {
       console.error('Failed to set config', key, err);
       errorToast(i18n.t('Unable to save your preferences. Try to disable any anti-virus'));
@@ -217,6 +220,89 @@ export default function useUserSettingsRoot() {
     return () => {
       firstUpdateRef.current = true;
     };
+  }, []);
+
+  // Cut: settings live in two windows (main and settings); reload a key when the other one changes it
+  useEffect(() => {
+    const setters: Partial<Record<keyof Config, (v: never) => void>> = {
+      lastAppVersion: setLastAppVersion,
+      captureFormat: setCaptureFormat,
+      recentCustomOutDirs: setRecentCustomOutDirs,
+      enableCustomOutDir: setEnableCustomOutDir,
+      keyframeCut: setKeyframeCut,
+      preserveMetadata: setPreserveMetadata,
+      preserveMetadataOnMerge: setPreserveMetadataOnMerge,
+      preserveMovData: setPreserveMovData,
+      preserveChapters: setPreserveChapters,
+      movFastStart: setMovFastStart,
+      avoidNegativeTs: setAvoidNegativeTs,
+      autoMerge: setAutoMerge,
+      timecodeFormat: setTimecodeFormat,
+      invertCutSegments: setInvertCutSegments,
+      autoExportExtraStreams: setAutoExportExtraStreams,
+      askBeforeClose: setAskBeforeClose,
+      enableImportChapters: setEnableImportChapters,
+      enableAskForFileOpenAction: setEnableAskForFileOpenAction,
+      playbackVolume: setPlaybackVolume,
+      autoSaveProjectFile: setAutoSaveProjectFile,
+      wheelSensitivity: setWheelSensitivity,
+      waveformHeight: setWaveformHeight,
+      invertTimelineScroll: setInvertTimelineScroll,
+      language: setLanguage,
+      ffmpegExperimental: setFfmpegExperimental,
+      hideNotifications: setHideNotifications,
+      hideOsNotifications: setHideOsNotifications,
+      autoLoadTimecode: setAutoLoadTimecode,
+      autoDeleteMergedSegments: setAutoDeleteMergedSegments,
+      exportConfirmEnabled: setExportConfirmEnabled,
+      segmentsToChapters: setSegmentsToChapters,
+      simpleMode: setSimpleMode,
+      outSegTemplate: setCutFileTemplate,
+      mergedFileTemplate: setCutMergedFileTemplate,
+      mergedFilesTemplate: setMergedFileTemplate,
+      keyboardSeekAccFactor: setKeyboardSeekAccFactor,
+      keyboardNormalSeekSpeed: setKeyboardNormalSeekSpeed,
+      keyboardSeekSpeed2: setKeyboardSeekSpeed2,
+      keyboardSeekSpeed3: setKeyboardSeekSpeed3,
+      treatInputFileModifiedTimeAsStart: setTreatInputFileModifiedTimeAsStart,
+      treatOutputFileModifiedTimeAsStart: setTreatOutputFileModifiedTimeAsStart,
+      outFormatLocked: setOutFormatLocked,
+      safeOutputFileName: setSafeOutputFileName,
+      enableAutoHtml5ify: setEnableAutoHtml5ify,
+      segmentsToChaptersOnly: setSegmentsToChaptersOnly,
+      keyBindings: setKeyBindings,
+      enableSmartCut: setEnableSmartCut,
+      customFfPath: setCustomFfPath,
+      storeProjectInWorkingDir: setStoreProjectInWorkingDir,
+      enableOverwriteOutput: setEnableOverwriteOutput,
+      mouseWheelZoomModifierKey: setMouseWheelZoomModifierKey,
+      mouseWheelFrameSeekModifierKey: setMouseWheelFrameSeekModifierKey,
+      mouseWheelKeyframeSeekModifierKey: setMouseWheelKeyframeSeekModifierKey,
+      segmentMouseModifierKey: setSegmentMouseModifierKey,
+      captureFrameMethod: setCaptureFrameMethod,
+      captureFrameQuality: setCaptureFrameQuality,
+      captureFrameFileNameFormat: setCaptureFrameFileNameFormat,
+      enableNativeHevc: setEnableNativeHevc,
+      enableUpdateCheck: setEnableUpdateCheck,
+      cleanupChoices: setCleanupChoices,
+      allowMultipleInstances: setAllowMultipleInstances,
+      theme: setTheme,
+      videoFit: setVideoFit,
+      preferStrongColors: setPreferStrongColors,
+      outputFileNameMinZeroPadding: setOutputFileNameMinZeroPadding,
+      cutFromAdjustmentFrames: setCutFromAdjustmentFrames,
+      cutToAdjustmentFrames: setCutToAdjustmentFrames,
+      storeWindowBounds: setStoreWindowBounds,
+      waveformMode: setWaveformMode,
+      thumbnailsEnabled: setThumbnailsEnabled,
+      keyframesEnabled: setKeyframesEnabled,
+      reducedMotion: setReducedMotion,
+      ffmpegHwaccel: setFfmpegHwaccel,
+    };
+    const onChanged = (_e: unknown, key: keyof Config) => setters[key]?.(safeGetConfig(key) as never);
+    ipcRenderer.on('configChanged', onChanged);
+    return () => { ipcRenderer.off('configChanged', onChanged); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- setters are stable
   }, []);
 
   // note: main sets nativeTheme.themeSource from `theme`, and it must be 'system' for prefers-color-scheme to report the OS theme
