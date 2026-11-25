@@ -7,7 +7,7 @@
   background-color: var(--gray-a3);
   color: var(--gray-12);
   border-radius: var(--cut-radius);
-  padding: .1em 1.6em .1em .6em;
+  padding: .1em 1.3em .1em .4em;
   outline: none;
   border: .5px solid var(--gray-a6);
   box-shadow: 0 .5px 1px rgba(0, 0, 0, .12);
@@ -15,9 +15,9 @@
   /* up/down chevrons, as on macOS pop-up buttons */
   background-image: url("data:image/svg+xml;utf8,<svg fill='none' stroke='rgba(0,0,0,0.55)' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M9 10l3-3 3 3M9 14l3 3 3-3'/></svg>");
   background-repeat: no-repeat;
-  background-position-x: 100%;
-  background-position-y: 0;
-  background-size: auto 100%;
+  background-position-x: calc(100% - .15em);
+  background-position-y: center;
+  background-size: auto 85%;
 }
 
 .select:hover {
