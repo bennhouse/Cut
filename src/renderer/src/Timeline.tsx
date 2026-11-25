@@ -94,6 +94,7 @@ function Timeline({
   relevantTime,
   zoom,
   seekAbs,
+  onScrubbingChange,
   cutSegments,
   setCurrentSegIndex,
   currentSegIndexSafe,
@@ -124,6 +125,7 @@ function Timeline({
   zoom: number,
   neighbouringKeyFrames: Frame[],
   seekAbs: (a: number) => void,
+  onScrubbingChange?: ((scrubbing: boolean) => void) | undefined,
   cutSegments: StateSegment[],
   setCurrentSegIndex: (a: number) => void,
   currentSegIndexSafe: number,
@@ -304,6 +306,7 @@ function Timeline({
     }
 
     mouseDownRef.current = e.target;
+    onScrubbingChange?.(true);
 
     function onMouseMove(e2: MouseEvent) {
       if (mouseDownRef.current == null) return;
@@ -324,6 +327,7 @@ function Timeline({
     }
 
     function onMouseUp() {
+      onScrubbingChange?.(false);
       mouseDownRef.current = undefined;
       resizingSegmentRef.current = undefined;
       window.removeEventListener('mouseup', onMouseUp);
@@ -335,7 +339,7 @@ function Timeline({
     // https://stackoverflow.com/questions/6073505/what-is-the-difference-between-screenx-y-clientx-y-and-pagex-y
     window.addEventListener('mouseup', onMouseUp, { once: true });
     window.addEventListener('mousemove', onMouseMove);
-  }, [fileDurationNonZero, getMouseTimelinePos, seekAbs, segmentMouseModifierKey, setCutTime, zoom]);
+  }, [fileDurationNonZero, getMouseTimelinePos, onScrubbingChange, seekAbs, segmentMouseModifierKey, setCutTime, zoom]);
 
   const onMouseMove = useCallback<MouseEventHandler<HTMLDivElement>>((e) => {
     if (!mouseDownRef.current) { // no button pressed

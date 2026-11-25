@@ -106,6 +106,7 @@ import type { FFprobeChapter, FFprobeStream } from '../../common/ffprobe.js';
 import { parseFfprobeDuration } from '../../common/util.js';
 
 import useLoading from './hooks/useLoading';
+import useScrubPreview, { needsScrubPreview } from './hooks/useScrubPreview';
 import useVideo from './hooks/useVideo';
 import useTimecode from './hooks/useTimecode';
 import useSegmentsAutoSave from './hooks/useSegmentsAutoSave';
@@ -617,6 +618,35 @@ function App() {
     || usingDummyVideo;
 
   const compatPlayerEnabled = (compatPlayerRequired || compatPlayerWanted) && (activeVideoStream != null || activeAudioStreams.length > 0);
+
+  // Cut: instant previews while dragging on the timeline of heavy video (see hooks/useScrubPreview.ts)
+  const scrubPreviewEnabled = hasVideo && !compatPlayerEnabled && needsScrubPreview(activeVideoStream, mainFileFormat?.bit_rate);
+  const { ready: scrubPreviewReady, getFrameAt: getScrubFrameAt } = useScrubPreview({ filePath, videoStreamIndex: activeVideoStream?.index, duration: fileDuration, enabled: scrubPreviewEnabled });
+  const [scrubbing, setScrubbing] = useState(false);
+  const scrubReleasedRef = useRef(false);
+  const onScrubbingChange = useCallback((value: boolean) => {
+    if (value) {
+      scrubReleasedRef.current = false;
+      setScrubbing(true);
+      return;
+    }
+    // keep the preview until the player shows the exact frame (onVideoSeeked), at most 2 s
+    scrubReleasedRef.current = true;
+    setTimeout(() => {
+      if (!scrubReleasedRef.current) return;
+      scrubReleasedRef.current = false;
+      setScrubbing(false);
+    }, 2000);
+  }, []);
+  const onVideoSeeked = useCallback<ReactEventHandler<HTMLVideoElement>>((e) => {
+    onSeeked(e);
+    const video = videoRef.current;
+    if (scrubReleasedRef.current && video != null && Math.abs(video.currentTime - commandedTimeRef.current) < 0.05) {
+      scrubReleasedRef.current = false;
+      setScrubbing(false);
+    }
+  }, [commandedTimeRef, onSeeked, videoRef]);
+  const scrubFrame = scrubbing && scrubPreviewReady ? getScrubFrameAt(commandedTime) : undefined;
 
   useEffect(() => {
     // Reset the user preference when we go from not having compat player to having it
@@ -2598,10 +2628,12 @@ function App() {
                         onClick={onVideoClick}
                         onDoubleClick={toggleFullscreenVideo}
                         onFocusCapture={onVideoFocus}
-                        onSeeked={onSeeked}
+                        onSeeked={onVideoSeeked}
                       >
                         {renderSubtitles()}
                       </video>
+
+                      {scrubFrame != null && <img src={scrubFrame.url} alt="" style={{ ...mainVideoStyle, position: 'absolute', inset: 0, pointerEvents: 'none' }} />}
 
                       {filePath != null && compatPlayerEnabled && <MediaSourcePlayer rotate={effectiveRotation} filePath={filePath} videoStream={activeVideoStream} audioStreams={activeAudioStreams} masterVideoRef={videoRef} mediaSourceQuality={mediaSourceQuality} ffmpegHwaccel={ffmpegHwaccel} baseVideoStyle={mainVideoStyle} />}
                     </div>
@@ -2718,6 +2750,7 @@ function App() {
                     startTimeOffset={startTimeOffset}
                     zoom={zoom}
                     seekAbs={seekAbs}
+                    onScrubbingChange={scrubPreviewEnabled ? onScrubbingChange : undefined}
                     fileDurationNonZero={fileDurationNonZero}
                     cutSegments={cutSegments}
                     setCurrentSegIndex={setCurrentSegIndex}
