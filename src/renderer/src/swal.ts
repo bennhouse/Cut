@@ -35,15 +35,20 @@ function initSwal(reducedMotion = false) {
     ...commonSwalOptions,
   });
 
+  // Cut: a small static notice at the top, like a macOS banner: it fades in place (no sliding or
+  // bouncing icon), sizes to its text, has a close button and stays while the pointer is on it
   toast = Swal.mixin({
     ...commonSwalOptions,
     toast: true,
-    width: '50vw',
+    width: 'auto',
     position: 'top',
     showConfirmButton: false,
     showCloseButton: true,
     timer: 5000,
-    timerProgressBar: true,
+    timerProgressBar: false,
+    customClass: { popup: 'cut-toast' },
+    showClass: { popup: reducedMotion ? '' : 'cut-toast-in', backdrop: '', icon: '' },
+    hideClass: { popup: reducedMotion ? '' : 'cut-toast-out', backdrop: '', icon: '' },
     didOpen: (self) => {
       self.addEventListener('mouseenter', Swal.stopTimer);
       self.addEventListener('mouseleave', Swal.resumeTimer);
