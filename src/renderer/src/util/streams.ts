@@ -99,6 +99,9 @@ export const pcmAudioCodecs = [
   'pcm_vidc',
 ];
 
+// Cut: the PCM codecs the bundled FFmpeg muxes into MP4 (checked with FFmpeg 9.0.2).
+export const mp4PcmAudioCodecs = ['pcm_s16be', 'pcm_s16le', 'pcm_s24be', 'pcm_s24le', 'pcm_s32be', 'pcm_s32le', 'pcm_f32be', 'pcm_f32le', 'pcm_f64be', 'pcm_f64le'];
+
 export function getActiveDisposition(disposition: FFprobeStreamDisposition | undefined) {
   if (disposition == null) return undefined;
   const existingActiveDispositionEntry = Object.entries(disposition).find(([, value]) => value === 1);

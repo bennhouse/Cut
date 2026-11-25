@@ -7,7 +7,7 @@ import minBy from 'lodash/minBy';
 import invariant from 'tiny-invariant';
 import z from 'zod';
 
-import { pcmAudioCodecs, isMov } from './util/streams';
+import { pcmAudioCodecs, mp4PcmAudioCodecs, isMov } from './util/streams';
 import { decodeText, isExecaError, safeCreateBlob } from './util';
 import { isDurationValid } from './segments';
 import type { FFprobeChapter, FFprobeFormat, FFprobeProbeResult, FFprobeStream } from '../../common/ffprobe';
@@ -219,7 +219,9 @@ function mapInputToOutputFormat(requestedFormat: string | undefined) {
 export function mapRecommendedDefaultFormat({ streams, sourceFormat }: { streams: FFprobeStream[], sourceFormat: string | undefined }) {
   // Certain codecs cannot be muxed by ffmpeg into mp4, but in MOV they can
   // so we default to MOV instead in those cases https://github.com/mifi/lossless-cut/issues/948
-  if (sourceFormat === 'mp4' && streams.some((stream) => pcmAudioCodecs.includes(stream.codec_name))) {
+  // Cut: FFmpeg 6.1+ writes integer and float PCM into MP4 (ISO/IEC 23003-5 'ipcm'/'fpcm'), which
+  // covers the LPCM of Sony XAVC S and other cameras, so only the other PCM codecs still need MOV.
+  if (sourceFormat === 'mp4' && streams.some((stream) => pcmAudioCodecs.includes(stream.codec_name) && !mp4PcmAudioCodecs.includes(stream.codec_name))) {
     return { format: 'mov', message: i18n.t('This file contains an audio track that FFmpeg is unable to mux into the MP4 format, so MOV has been auto-selected as the default output format.') };
   }
 
