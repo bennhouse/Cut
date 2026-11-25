@@ -5,7 +5,7 @@ import { MdRotate90DegreesCcw } from './icons';
 import { useTranslation } from 'react-i18next';
 import { IoIosCamera, IoMdKey, IoMdSpeedometer } from './icons';
 import { FaYinYang, FaTrashAlt, FaStepBackward, FaStepForward, FaCaretLeft, FaCaretRight, FaPause, FaPlay, FaImages, FaKey, FaExclamationTriangle } from './icons';
-import { GiSoundWaves } from './icons';
+import { GiSoundWaves, FaSearch } from './icons';
 // import useTraceUpdate from 'use-trace-update';
 import invariant from 'tiny-invariant';
 
@@ -36,6 +36,9 @@ import mainApi from './mainApi';
 const zoomOptions = Array.from({ length: 13 }, (_unused, z) => 2 ** z);
 
 const leftRightWidth = 100;
+
+// Cut: every glyph button in the bar has one size (15px symbol in a 25px square); Play is larger
+const iconButton: CSSProperties = { fontSize: 15, padding: 5, flexShrink: 0 };
 
 const timeWrapperStyle: CSSProperties = {
   display: 'flex',
@@ -70,7 +73,7 @@ const InvertCutModeButton = memo(({ invertCutSegments, setInvertCutSegments }: {
         <FaYinYang
           role="button"
           title={t(invertCutSegments ? 'Discard selected segments' : 'Keep selected segments')}
-          style={{ display: 'block', fontSize: '1.5em', color: invertCutSegments ? dangerColor : undefined }}
+          style={{ ...iconButton, display: 'block', color: invertCutSegments ? dangerColor : undefined }}
           onClick={onYinYangClick}
         />
       </motion.div>
@@ -246,9 +249,9 @@ const CutTimeInput = memo(({ disabled, darkMode, cutTime, setCutTime, startTimeO
     marginLeft: isStart ? 0 : 5,
     marginRight: isStart ? 5 : 0,
     boxSizing: 'border-box',
-    fontFamily: 'monospace',
-    letterSpacing: '-.05em',
-    width: 94,
+    fontVariantNumeric: 'tabular-nums',
+    width: 92,
+    height: 24,
     outline: 'none',
     color: error ? dangerColor : (isCutTimeManualSet ? 'var(--gray-12)' : 'var(--gray-11)'),
   }), [border, error, isCutTimeManualSet, isStart]);
@@ -278,7 +281,7 @@ const CutTimeInput = memo(({ disabled, darkMode, cutTime, setCutTime, startTimeO
 });
 
 function BottomBar({
-  zoom, setZoom, timelineToggleComfortZoom,
+  zoom, setZoom,
   isRotationSet, rotation, areWeCutting, increaseRotation, cleanupFilesDialog,
   captureSnapshot, onExportPress, segmentsToExport, hasVideo,
   seekAbs, currentSegIndexSafe, cutSegments, currentCutSeg, setCutStart, setCutEnd,
@@ -355,8 +358,9 @@ function BottomBar({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '2.3em',
-    height: '2.3em',
+    width: 34,
+    height: 34,
+    flexShrink: 0,
     borderRadius: '50%',
     boxSizing: 'border-box',
   }), [playing]);
@@ -381,7 +385,9 @@ function BottomBar({
 
     return {
       ...playStyle,
-      fontSize: '.7em',
+      width: 26,
+      height: 26,
+      fontSize: 11,
       backgroundOffset: 30,
       background: `linear-gradient(90deg, ${gradientColors})`,
       border: '1px solid var(--gray-10)',
@@ -449,7 +455,7 @@ function BottomBar({
             <>
               {hasAudio && (
                 <GiSoundWaves
-                  style={{ fontSize: '1.6em', padding: '0 .1em', color: waveformMode != null ? primaryTextColor : undefined }}
+                  style={{ ...iconButton, color: waveformMode != null ? primaryTextColor : undefined }}
                   role="button"
                   title={actionTitle(t('Show waveform'), 'toggleWaveformMode')}
                   onClick={() => toggleWaveformMode()}
@@ -458,14 +464,14 @@ function BottomBar({
               {hasVideo && (
                 <>
                   <FaImages
-                    style={{ fontSize: '1.1em', padding: '0 .2em', color: showThumbnails ? primaryTextColor : undefined }}
+                    style={{ ...iconButton, color: showThumbnails ? primaryTextColor : undefined }}
                     role="button"
                     title={actionTitle(t('Show thumbnails'), 'toggleShowThumbnails')}
                     onClick={toggleShowThumbnails}
                   />
 
                   <FaKey
-                    style={{ fontSize: '1em', padding: '0 .2em', color: keyframesEnabled ? primaryTextColor : undefined }}
+                    style={{ ...iconButton, color: keyframesEnabled ? primaryTextColor : undefined }}
                     role="button"
                     title={actionTitle(t('Show keyframes'), 'toggleShowKeyframes')}
                     onClick={toggleShowKeyframes}
@@ -481,8 +487,7 @@ function BottomBar({
         {!simpleMode && (
           <>
             <FaStepBackward
-              size={16}
-              style={{ flexShrink: 0 }}
+              style={iconButton}
               title={actionTitle(t('Jump to start of video'), 'jumpTimelineStart')}
               role="button"
               onClick={jumpTimelineStart}
@@ -500,32 +505,29 @@ function BottomBar({
 
         {keyframesEnabled && (
           <IoMdKey
-            size={25}
             role="button"
             title={actionTitle(t('Seek previous keyframe'), 'seekBackwardsKeyframe')}
-            style={{ flexShrink: 0, marginRight: 2, transform: mirrorTransform, ...keyframeStyle }}
+            style={{ ...iconButton, transform: mirrorTransform, ...keyframeStyle }}
             onClick={() => seekClosestKeyframe(-1)}
           />
         )}
 
         {!simpleMode && (
           <FaCaretLeft
-            style={{ flexShrink: 0, marginLeft: -6, marginRight: -4 }}
-            size={28}
+            style={iconButton}
             role="button"
             title={actionTitle(t('One frame back'), 'seekPreviousFrame')}
             onClick={() => shortStep(-1)}
           />
         )}
 
-        <div title={actionTitle(t('Play/pause'), 'togglePlayResetSpeed')} role="button" onClick={() => togglePlay()} style={{ ...playStyle, margin: '.1em .1em 0 .2em', background: primaryColor }}>
-          <PlayPause style={{ fontSize: '.9em' }} />
+        <div title={actionTitle(t('Play/pause'), 'togglePlayResetSpeed')} role="button" onClick={() => togglePlay()} style={{ ...playStyle, margin: '0 4px', background: primaryColor }}>
+          <PlayPause style={{ fontSize: 14 }} />
         </div>
 
         {!simpleMode && (
           <FaCaretRight
-            style={{ flexShrink: 0, marginRight: -6, marginLeft: -4 }}
-            size={28}
+            style={iconButton}
             role="button"
             title={actionTitle(t('One frame forward'), 'seekNextFrame')}
             onClick={() => shortStep(1)}
@@ -534,8 +536,7 @@ function BottomBar({
 
         {keyframesEnabled && (
           <IoMdKey
-            style={{ flexShrink: 0, marginLeft: 2, ...keyframeStyle }}
-            size={25}
+            style={{ ...iconButton, ...keyframeStyle }}
             role="button"
             title={actionTitle(t('Seek next keyframe'), 'seekForwardsKeyframe')}
             onClick={() => seekClosestKeyframe(1)}
@@ -553,8 +554,7 @@ function BottomBar({
             {renderJumpCutpointButton(1)}
 
             <FaStepForward
-              size={16}
-              style={{ flexShrink: 0 }}
+              style={iconButton}
               title={actionTitle(t('Jump to end of video'), 'jumpTimelineEnd')}
               role="button"
               onClick={jumpTimelineEnd}
@@ -580,19 +580,17 @@ function BottomBar({
 
         {isFileOpened && !simpleMode && (
           <>
-            <div role="button" title={t('Zoom')} onClick={timelineToggleComfortZoom}>{Math.floor(zoom)}x</div>
-
-            <Select style={{ width: '4.9em' }} value={zoomOptions.includes(zoom) ? zoom.toString() : ''} title={t('Zoom')} onChange={withBlur((e) => setZoom(() => parseInt(e.target.value, 10)))}>
+            <Select label={<><FaSearch style={{ fontSize: 12 }} />{Math.floor(zoom)}×</>} value={zoomOptions.includes(zoom) ? zoom.toString() : ''} title={t('Zoom')} onChange={withBlur((e) => setZoom(() => parseInt(e.target.value, 10)))}>
               <option key="" value="" disabled>{t('Zoom')}</option>
               {zoomOptions.map((val) => (
-                <option key={val} value={String(val)}>{t('Zoom')} {val}x</option>
+                <option key={val} value={String(val)}>{t('Zoom')} {val}×</option>
               ))}
             </Select>
 
             <div ref={playbackRateRef} title={t('Playback rate')} style={{ color: 'var(--gray-11)', fontSize: '.7em', borderRadius: '.5em' }}>{playbackRate.toFixed(1)}</div>
 
             <div style={{ whiteSpace: 'nowrap' }}>
-              <IoMdSpeedometer title={t('Change FPS')} style={{ fontSize: '1.3em', verticalAlign: 'middle' }} role="button" onClick={handleChangePlaybackRateClick} />
+              <IoMdSpeedometer title={t('Change FPS')} style={{ ...iconButton, verticalAlign: 'middle' }} role="button" onClick={handleChangePlaybackRateClick} />
 
               {detectedFps != null && (
                 <span title={t('Video FPS')} role="button" onClick={handleChangePlaybackRateClick} style={{ color: 'var(--gray-11)', fontSize: '.7em', marginLeft: '.3em' }}>{(detectedFps * outputPlaybackRate).toFixed(3)}</span>
@@ -604,7 +602,7 @@ function BottomBar({
         {isFileOpened && !simpleMode && hasVideo && (
           <div onClick={increaseRotation} role="button" style={{ whiteSpace: 'nowrap' }}>
             <MdRotate90DegreesCcw
-              style={{ fontSize: '1.3em', verticalAlign: 'middle', color: isRotationSet ? primaryTextColor : undefined }}
+              style={{ ...iconButton, verticalAlign: 'middle', color: isRotationSet ? primaryTextColor : undefined }}
               title={actionTitle(`${t('Set output rotation. Current: ')} ${isRotationSet ? rotationStr : t('Don\'t modify')}`, 'increaseRotation')}
             />
             <span style={{ textAlign: 'right', display: 'inline-block', fontSize: '.8em', marginLeft: '.1em' }}>{isRotationSet && rotationStr}</span>
@@ -626,7 +624,7 @@ function BottomBar({
         {!simpleMode && isFileOpened && (
           <FaTrashAlt
             title={actionTitle(t('Close file and clean up'), 'cleanupFilesDialog')}
-            style={{ fontSize: '1em', color: dangerColor }}
+            style={{ ...iconButton, color: dangerColor }}
             onClick={cleanupFilesDialog}
             role="button"
           />
@@ -636,7 +634,7 @@ function BottomBar({
           <div style={{ whiteSpace: 'nowrap' }}>
             <IoIosCamera
               role="button"
-              style={{ fontSize: '1.9em', verticalAlign: 'middle' }}
+              style={{ ...iconButton, verticalAlign: 'middle' }}
               title={actionTitle(t('Capture frame'), 'captureSnapshot')}
               onClick={captureSnapshot}
             />

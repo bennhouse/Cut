@@ -95,3 +95,4 @@ export const IoMdSpeedometer = sf('gauge.with.dots.needle.67percent');
 export const MdEventNote = sf('note.text');
 export const MdRotate90DegreesCcw = sf('rotate.left');
 export const MdSubtitles = sf('captions.bubble');
+export const FaSearch = sf('magnifyingglass');

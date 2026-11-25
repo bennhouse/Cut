@@ -53,7 +53,7 @@ function VolumeControl({ playbackVolume, setPlaybackVolume, onToggleMutedClick }
 
       <VolumeIcon
         title={actionTitle(t('Mute preview? (will not affect output)'), 'toggleMuted')}
-        size={30}
+        size={18}
         role="button"
         style={{ margin: '0 7px', color: 'var(--gray-12)', opacity: 0.7 }}
         onClick={onVolumeIconClick}

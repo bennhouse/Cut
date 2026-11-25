@@ -20,19 +20,19 @@ import { saveColor, controlsBackground, primaryTextColor, darkModeTransition } f
 import { useSegColors } from './contexts';
 import { getSegmentTags } from './segments';
 import TagEditor, { cancelTagEditOnEscape } from './components/TagEditor';
-import type { ContextMenuTemplate, DefiniteSegmentBase, FormatTimecode, GetFrameCount, InverseCutSegment, SegmentBase, SegmentColorIndex, SegmentTags, StateSegment } from './types';
+import type { ContextMenuTemplate, DefiniteSegmentBase, FormatTimecode, GetFrameCount, InverseCutSegment, SegmentBase, SegmentTags, StateSegment } from './types';
 import type { UseSegments } from './hooks/useSegments';
 import * as Dialog from './components/Dialog';
 import { DialogButton } from './components/Button';
 import getSwal from './swal';
 
 
+// Cut: plain glyph buttons of one size (15px symbol in a 25px square), like a macOS list footer
 const buttonBaseStyle: CSSProperties = {
-  margin: '0 3px', borderRadius: 7, color: 'white', cursor: 'pointer', userSelect: 'none',
+  margin: '0 2px', padding: 5, fontSize: 15, color: 'var(--gray-12)', userSelect: 'none',
 };
 
-const disabledButtonStyle = { color: 'var(--gray-10)', backgroundColor: 'var(--gray-6)' };
-const neutralButtonColor = 'var(--gray-9)';
+const disabledButtonStyle: CSSProperties = { opacity: 0.35, pointerEvents: 'none' };
 
 // eslint-disable-next-line react/display-name
 const Segment = memo(({
@@ -307,7 +307,6 @@ function SegmentList({
   removeSegment,
   onRemoveSelected,
   onLabelSegment,
-  currentCutSeg,
   firstSegmentAtCursor,
   toggleSegmentsList,
   splitCurrentSegment,
@@ -377,16 +376,10 @@ function SegmentList({
   getSegEstimatedSize: UseSegments['getSegEstimatedSize'],
 }) {
   const { t } = useTranslation();
-  const { getSegColor, nextSegColorIndex } = useSegColors();
   const [draggingId, setDraggingId] = useState<UniqueIdentifier | undefined>();
 
-  const { invertCutSegments, simpleMode, darkMode, springAnimation } = useUserSettings();
+  const { invertCutSegments, simpleMode, springAnimation } = useUserSettings();
   const actionTitle = useActionTitle();
-
-  const getButtonColor = useCallback((seg: SegmentColorIndex | undefined, next?: boolean) => getSegColor(seg ? { segColorIndex: next ? seg.segColorIndex + 1 : seg.segColorIndex } : undefined).desaturate(0.3).lightness(darkMode ? 45 : 55).string(), [darkMode, getSegColor]);
-  const currentSegColor = useMemo(() => getButtonColor(currentCutSeg), [currentCutSeg, getButtonColor]);
-  const segAtCursorColor = useMemo(() => getButtonColor(firstSegmentAtCursor), [getButtonColor, firstSegmentAtCursor]);
-  const nextSegmentColor = useMemo(() => getButtonColor({ segColorIndex: nextSegColorIndex }, false), [getButtonColor, nextSegColorIndex]);
 
   const segmentsTotal = useMemo(() => selectedSegments.reduce((acc, seg) => (seg.end == null ? 0 : seg.end - seg.start) + acc, 0), [selectedSegments]);
 
@@ -437,16 +430,14 @@ function SegmentList({
       <>
         <div style={{ display: 'flex', padding: '5px 0', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid var(--gray-6)' }}>
           <FaPlus
-            size={24}
-            style={{ ...buttonBaseStyle, background: nextSegmentColor }}
+            style={buttonBaseStyle}
             role="button"
             title={actionTitle(t('Add segment'), 'addSegment')}
             onClick={addSegment}
           />
 
           <FaMinus
-            size={24}
-            style={{ ...buttonBaseStyle, ...(cutSegments.length > 0 ? { backgroundColor: currentSegColor } : disabledButtonStyle) }}
+            style={{ ...buttonBaseStyle, ...(cutSegments.length > 0 ? {} : disabledButtonStyle) }}
             role="button"
             title={actionTitle(t('Remove cutpoint from segment {{segmentNumber}}', { segmentNumber: currentSegIndex + 1 }), 'removeCurrentCutpoint')}
             onClick={() => removeSegment(currentSegIndex)}
@@ -455,37 +446,33 @@ function SegmentList({
           {!invertCutSegments && !simpleMode && (
             <>
               <FaSortNumericDown
-                size={16}
                 title={actionTitle(t('Change segment order'), 'reorderSegsByStartTime')}
                 role="button"
-                style={{ ...buttonBaseStyle, padding: 4, ...(cutSegments.length >= 2 ? { backgroundColor: currentSegColor } : disabledButtonStyle) }}
+                style={{ ...buttonBaseStyle, ...(cutSegments.length >= 2 ? {} : disabledButtonStyle) }}
                 onClick={() => onReorderSegs(currentSegIndex)}
               />
 
               <FaTag
-                size={16}
                 title={actionTitle(t('Label segment'), 'labelCurrentSegment')}
                 role="button"
-                style={{ ...buttonBaseStyle, padding: 4, ...(cutSegments.length > 0 ? { backgroundColor: currentSegColor } : disabledButtonStyle) }}
+                style={{ ...buttonBaseStyle, ...(cutSegments.length > 0 ? {} : disabledButtonStyle) }}
                 onClick={() => onLabelSegment(currentSegIndex)}
               />
             </>
           )}
 
           <AiOutlineSplitCells
-            size={22}
             title={actionTitle(t('Split segment at cursor'), 'splitCurrentSegment')}
             role="button"
-            style={{ ...buttonBaseStyle, padding: 1, ...(firstSegmentAtCursor ? { backgroundColor: segAtCursorColor } : disabledButtonStyle) }}
+            style={{ ...buttonBaseStyle, ...(firstSegmentAtCursor ? {} : disabledButtonStyle) }}
             onClick={splitCurrentSegment}
           />
 
           {!invertCutSegments && (
             <FaRegCheckCircle
-              size={22}
               title={actionTitle(t('Invert segment selection'), 'invertSelectedSegments')}
               role="button"
-              style={{ ...buttonBaseStyle, padding: 1, ...(cutSegments.length > 0 ? { backgroundColor: neutralButtonColor } : disabledButtonStyle) }}
+              style={{ ...buttonBaseStyle, ...(cutSegments.length > 0 ? {} : disabledButtonStyle) }}
               onClick={onInvertSelectedSegments}
             />
           )}

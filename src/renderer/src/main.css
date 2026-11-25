@@ -52,6 +52,12 @@ body {
   body { background: #ececec; }
 }
 
+/* Cut: the Radix theme sets its own 16px base; macOS apps use 13px */
+.radix-themes {
+  --default-font-size: 13px;
+  --default-font-family: system-ui, -apple-system, sans-serif;
+}
+
 /* Cut: SF Symbols that act as buttons (components/SFSymbol.tsx): a quiet rounded hover, no hand cursor */
 .sfsym[role=button] {
   cursor: default;
