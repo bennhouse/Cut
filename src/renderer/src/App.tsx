@@ -2233,6 +2233,8 @@ function App() {
     document.ondragend = dragPreventer;
 
     ipcRenderer.send('renderer-ready');
+    // Cut: main shows the window once this first frame is on screen (two frames later it has been painted)
+    requestAnimationFrame(() => requestAnimationFrame(() => ipcRenderer.send('window-painted')));
   }, []);
 
   useEffect(() => {

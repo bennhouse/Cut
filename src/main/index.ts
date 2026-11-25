@@ -180,9 +180,26 @@ function createWindow() {
     ...(isMac ? { titleBarStyle: 'hiddenInset' as const, trafficLightPosition: { x: 14, y: 13 } } : {}),
     minWidth: 300,
     minHeight: 300,
+    // Cut: hidden until the interface has painted its first frame, so the window never shows
+    // an empty (black) page while the renderer starts
+    show: false,
   });
 
-  if (savedBounds.isMaximized) mainWindow.maximize();
+  const win = mainWindow;
+  let shown = false;
+  const showWindow = (reason: string) => {
+    if (shown || win.isDestroyed()) return;
+    shown = true;
+    logger.info('Showing the main window', reason);
+    clearTimeout(showFallback);
+    ipcMain.off('window-painted', onPainted);
+    if (savedBounds.isMaximized) win.maximize(); // maximize() would show the window
+    win.show();
+  };
+  const onPainted = (e: Electron.IpcMainEvent) => { if (e.sender === win.webContents) showWindow('painted'); };
+  ipcMain.on('window-painted', onPainted);
+  // never stay hidden if the renderer fails to report (a crash, an error boundary)
+  const showFallback = setTimeout(() => showWindow('timeout'), 6000);
 
   // Development aid (Cut): with --cut-snapshot <folder> (or CUT_SNAPSHOT=<folder>), a PNG of the
   // window's content is written every second, so the layout can be checked without screen recording.
