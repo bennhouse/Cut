@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- New icon, redrawn with the rest of the suite from one shared design (same glass parts, light, shadows and safe area on every icon).
 - Camera files with LPCM audio (Sony XAVC S and others) keep MP4 as the output format instead of switching to MOV.
 - Smooth scrubbing on heavy video (4K, high bitrate, 10-bit 4:2:2): instant keyframe previews while dragging on the timeline.
 - No keyframe lines on the timeline.
